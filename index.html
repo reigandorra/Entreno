@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Entreno: pla d'octubre a gener</title>
+<style>
+  :root {
+    --pista: #1d4e89; --pista-fosc: #153a66; --linia: #ffffff; --fons: #eef2f6;
+    --carta: #ffffff; --tinta: #14213d; --suau: #5d6b80; --groc: #f2c230; --fet: #2e7d5b; --vora: #d3dbe5;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) { --fons: #0f1724; --carta: #182335; --tinta: #e8edf5; --suau: #9aa8bd; --vora: #2b3a52; --pista: #24609f; --pista-fosc: #12233c; --fet: #58b98d; }
+  }
+  :root[data-theme="dark"] { --fons: #0f1724; --carta: #182335; --tinta: #e8edf5; --suau: #9aa8bd; --vora: #2b3a52; --pista: #24609f; --pista-fosc: #12233c; --fet: #58b98d; }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); background: var(--fons); }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--fons); color: var(--tinta); font: 16px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .titol-font { font-family: "Avenir Next Condensed", "Roboto Condensed", "Arial Narrow", system-ui, sans-serif; font-weight: 700; letter-spacing: 0.01em; }
+  header { background: var(--pista); color: #fff; padding: 20px 16px 0; }
+  header h1 { margin: 0; font-size: 30px; line-height: 1.05; }
+  header p { margin: 6px 0 16px; font-size: 14px; opacity: 0.85; }
+  .carrers { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 2px solid #fff; }
+  .carrers button { appearance: none; background: transparent; color: #fff; border: 0; border-right: 2px solid #fff; padding: 10px 4px 12px; font: inherit; text-align: center; cursor: pointer; }
+  .carrers button:last-child { border-right: 0; }
+  .carrers .num { display: block; font-size: 24px; line-height: 1; }
+  .carrers .dates { display: block; font-size: 11px; opacity: 0.9; margin-top: 4px; }
+  .carrers button[aria-selected="true"] { background: var(--groc); color: #14213d; }
+  button:focus-visible, summary:focus-visible { outline: 3px solid var(--groc); outline-offset: -3px; }
+  .setmanes { display: flex; gap: 6px; padding: 10px 12px; background: var(--pista-fosc); overflow-x: auto; }
+  .setmanes button { appearance: none; flex: 1 0 auto; background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.5); padding: 8px 10px; font: inherit; font-size: 13px; cursor: pointer; white-space: nowrap; }
+  .setmanes button[aria-selected="true"] { background: #fff; color: #14213d; border-color: #fff; font-weight: 600; }
+  main { padding: 14px 12px 40px; max-width: 640px; margin: 0 auto; }
+  .resum { background: var(--carta); border-left: 6px solid var(--groc); padding: 12px 14px; margin-bottom: 14px; }
+  .resum h2 { margin: 0 0 6px; font-size: 19px; }
+  .resum ul { margin: 0; padding-left: 18px; font-size: 15px; }
+  .resum li { margin: 3px 0; }
+  details.dia { background: var(--carta); border: 1px solid var(--vora); margin-bottom: 8px; }
+  details.dia.avui { border-color: var(--pista); border-width: 2px; }
+  summary { list-style: none; display: flex; align-items: baseline; gap: 10px; padding: 12px 14px; cursor: pointer; }
+  summary::-webkit-details-marker { display: none; }
+  summary .nom { font-size: 20px; min-width: 92px; }
+  summary .tema { flex: 1; font-size: 14px; color: var(--suau); }
+  summary .compte { font-size: 13px; font-variant-numeric: tabular-nums; color: var(--suau); white-space: nowrap; }
+  details.complet summary .compte { color: var(--fet); font-weight: 700; }
+  .llista { padding: 0 14px 10px; }
+  label.ex { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; border-top: 1px solid var(--vora); cursor: pointer; }
+  label.ex input { width: 24px; height: 24px; margin: 1px 0 0; accent-color: var(--fet); flex: none; }
+  label.ex .txt b { font-weight: 600; }
+  label.ex .txt span { display: block; font-size: 14px; color: var(--suau); }
+  label.ex input:checked + .txt { color: var(--suau); text-decoration: line-through; }
+  label.ex.besso-ex .txt b::after { content: "bessó"; display: inline-block; margin-left: 8px; padding: 0 6px; background: var(--groc); color: #14213d; font-size: 11px; font-weight: 600; vertical-align: 2px; }
+  .menjar { border-top: 1px solid var(--vora); padding: 10px 0 6px; font-size: 14px; }
+  .menjar strong { display: block; margin-bottom: 4px; color: var(--pista); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .menjar strong { color: #8db8ea; } }
+  :root[data-theme="dark"] .menjar strong { color: #8db8ea; }
+  .menjar p { margin: 3px 0; }
+  .nota-dia { font-size: 14px; color: var(--suau); padding: 8px 0 4px; border-top: 1px solid var(--vora); }
+  .regles { margin-top: 18px; background: var(--pista-fosc); color: #fff; padding: 14px; }
+  .regles h2 { margin: 0 0 6px; font-size: 19px; }
+  .regles h3 { margin: 12px 0 4px; font-size: 15px; color: var(--groc); }
+  .regles ul { margin: 0; padding-left: 18px; font-size: 15px; }
+  .regles li { margin: 5px 0; }
+  .sessio, .pes { background: var(--carta); border: 1px solid var(--vora); padding: 12px 14px; margin-bottom: 14px; font-size: 15px; }
+  .sessio h2, .pes h2 { margin: 0 0 8px; font-size: 19px; }
+  .camps { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .camps input { flex: 1 1 140px; min-width: 0; padding: 9px 10px; font: inherit; border: 1px solid var(--vora); background: var(--fons); color: var(--tinta); }
+  .boto { appearance: none; background: var(--pista); color: #fff; border: 0; padding: 10px 14px; font: inherit; cursor: pointer; }
+  .boto.sec { background: transparent; color: var(--tinta); border: 1px solid var(--suau); }
+  .avis { margin: 8px 0 0; font-size: 14px; color: var(--suau); }
+  input.real { display: block; width: 100%; margin: 0 0 10px 36px; max-width: calc(100% - 36px); padding: 7px 9px; font: inherit; font-size: 14px; border: 1px solid var(--vora); background: var(--fons); color: var(--tinta); }
+  .fila { border-top: 1px solid var(--vora); }
+  .fila label.ex { border-top: 0; }
+  .peu { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; gap: 12px; }
+  .estat { font-size: 13px; color: var(--suau); }
+  .reinicia { appearance: none; background: transparent; border: 1px solid var(--suau); color: var(--tinta); font: inherit; font-size: 14px; padding: 8px 12px; cursor: pointer; }
+</style>
+</head>
+<body>
+<header>
+  <h1 class="titol-font">Pla d'octubre a gener</h1>
+  <p>Recuperació del bessó, força, tornada a la pista, menjar i suplements.</p>
+  <div class="carrers titol-font" role="tablist" aria-label="Mesos" id="carrers"></div>
+</header>
+<div class="setmanes" role="tablist" aria-label="Setmanes" id="setmanes"></div>
+
+<main>
+  <section class="sessio" id="compte"></section>
+  <section class="pes" id="pes" hidden></section>
+  <section class="resum" id="resum"></section>
+  <div id="dies"></div>
+
+  <section class="regles">
+    <h2 class="titol-font">Regles</h2>
+    <h3>Càrregues</h3>
+    <ul>
+      <li>Fes el pes que marca cada dia. Si no completes les repeticions, repeteix el mateix pes la setmana següent i tota la progressió es retarda una setmana.</li>
+      <li>Els pesos de novembre a gener són una projecció: a final de cada mes es corregeixen amb les xifres reals.</li>
+      <li>Sèries pesades: acaba amb 1-2 repeticions en reserva. Sèries explosives: no es puja el pes, es puja la velocitat.</li>
+      <li>Autoregulació: si les explosives van lentes, fes només una pesada o cap. Escalfament llarg, amb 2-3 sèries d'aproximació ràpides.</li>
+      <li>Descansos: 3 min entre sèries pesades, 2 min entre explosives, 1-2 min en accessoris i bessó.</li>
+    </ul>
+    <h3>Bessó i pista</h3>
+    <ul>
+      <li>Dolor màxim 3 sobre 10. Si l'endemà al matí està pitjor, torna al pas de la setmana anterior.</li>
+      <li>Octubre: res de trineu, salts amb càrrega ni trail. Ecografia de control abans de la setmana 3.</li>
+      <li>Pista i pliometria, mai en dies seguits. Sabatilles fins a la setmana 6; claus des de la 7, només a les acceleracions.</li>
+      <li>Amb fred, malles llargues i roba d'abric fins a les curses. Si el bessó protesta, repeteix la setmana de pista en lloc d'avançar.</li>
+      <li>Dos dies de pista des de la setmana 8, divendres a la tarda i diumenge al matí, si les pistes de les setmanes 5 a 7 han anat sense molèsties. Si no, continua amb una sola pista fins que el bessó estigui clarament bé.</li>
+      <li>Trail: amb dos dies de pista no hi cap. Només en lloc de la pista de divendres si se suspèn, i de nou a la primavera.</li>
+      <li>Inflor visible, calor o dolor en repòs al panxell: metge sense esperar.</li>
+      <li>Segona tanda d'isomètrics a la tarda o al vespre, almenys 6 hores després, amb el col·lagen 60 min abans.</li>
+    </ul>
+    <h3>Menjar</h3>
+    <ul>
+      <li>Proteïna: uns 110 g cada dia, en tres àpats de 35-40 g. El col·lagen no hi compta.</li>
+      <li>Dèficit en cicles: 3 setmanes de dèficit i 1 de manteniment. Dèficit: uns 1.900 kcal els dies alts i 1.500-1.600 els baixos. Manteniment: uns 2.000 cada dia.</li>
+      <li>Ous: només als esmorzars de cap de setmana, màxim 6 per setmana.</li>
+      <li>La pizza casolana, el vespre abans d'un dia alt: diumenge a l'octubre, dissabte des del novembre. Mitja pizza amb amanida.</li>
+      <li>Control: pes mitjà de 7 dies en dejú, plecs mensuals i cintura. Si baixa menys de 150 g per setmana, treu fruits secs; si baixa més de 400 g, afegeix hidrats els dies alts.</li>
+    </ul>
+    <h3>FMD i salut</h3>
+    <ul>
+      <li>FMD de l'1 al 5 de gener: descans total, només estiraments i caminades suaus. Sal des del primer dia.</li>
+      <li>Omega-3: les dues càpsules no han de sumar més d'1 g d'EPA i DHA.</li>
+      <li>Analítica al gener amb cistatina C, avisant que prens creatina.</li>
+    </ul>
+  </section>
+
+  <div class="peu">
+    <span class="estat" id="estat"></span>
+    <button class="reinicia" id="reinicia">Desmarca aquesta setmana</button>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const INICI = new Date(2026, 9, 5);
+const MESOS = ["gen", "feb", "mar", "abr", "mai", "jun", "jul", "ago", "set", "oct", "nov", "des"];
+const GRUPS = [
+  { nom: "Oct", sub: "Recuperació", setmanes: [1, 2, 3, 4] },
+  { nom: "Nov", sub: "Força i pista", setmanes: [5, 6, 7, 8] },
+  { nom: "Des", sub: "Pic de força", setmanes: [9, 10, 11, 12, 13] },
+  { nom: "Gen", sub: "FMD i potència", setmanes: [14, 15, 16, 17] }
+];
+const MANT = [4, 8, 12, 13, 14];
+const F = "fmd", T = "trans";
+function altSetmana(n) {
+  if (n <= 4) return [1, 1, 0, 1, 1, 0, 0];
+  if (n === 13) return [1, 0, 1, 0, F, F, F];
+  if (n === 14) return [F, F, T, 1, 1, 0, 1];
+  return [1, 0, 1, 0, 1, 0, 1];
+}
+function dataDia(n, i) { const d = new Date(INICI); d.setDate(d.getDate() + (n - 1) * 7 + i); return d; }
+function etiqueta(n) {
+  const a = dataDia(n, 0), b = dataDia(n, 6);
+  return a.getMonth() === b.getMonth() ? a.getDate() + "–" + b.getDate() + " " + MESOS[a.getMonth()]
+    : a.getDate() + " " + MESOS[a.getMonth()] + "–" + b.getDate() + " " + MESOS[b.getMonth()];
+}
+
+const BAAR = ["Isomètrics del protocol Baar", "Com cada dia"];
+const BAAR_FI = ["Isomètrics del protocol Baar", "Al final de la sessió, no entre sèries de cama"];
+const BAAR_T = x => ["Isomètrics del protocol Baar", "Als descansos " + x + ": 30 s per cama i 2 min de descans, 4 vegades"];
+const B = e => [e[0], e[1], true];
+
+/* ---------- Octubre (setmanes 1-4) ---------- */
+const OCT = [
+  { resum: ["Elevacions a una cama a l'esglaó: 3×12, pes corporal", "Baixa fins a notar estirament sense dolor, pausa d'1 s a baix, sense rebot", "Soli assegut: 3×12 a 25 kg", "Cap impacte"],
+    besso: [["Elevacions a una cama a l'esglaó", "3×12, pes corporal, tempo 3-0-3"], ["Soli assegut a màquina", "3×12 a 25 kg"]],
+    dx: [], ds: [["Rem en zona 2", "40 min, ritme còmode"], ["Mobilitat", "15 min"]] },
+  { resum: ["Elevacions a una cama: 3×8 amb 10 kg, rang complet", "Soli assegut: 3×8 a 35 kg", "Dissabte: caminada en pujada i rem 4×4"],
+    besso: [["Elevacions a una cama a l'esglaó", "3×8 amb 10 kg, rang complet, pausa d'1 s a baix"], ["Soli assegut a màquina", "3×8 a 35 kg"]],
+    dx: [], ds: [["Caminada ràpida en pujada", "20 min", true], ["Rem 4×4", "4 min forts i 3 min suaus, 4 vegades"], ["Mobilitat", "15 min"]] },
+  { resum: ["Elevacions a una cama: 3×8 amb 15 kg", "Soli assegut: 3×8 a 40 kg", "Dimecres: pogos a dues cames i corda", "Dissabte: trot a la gespa 5×1 min"],
+    besso: [["Elevacions a una cama a l'esglaó", "3×8 amb 15 kg"], ["Soli assegut a màquina", "3×8 a 40 kg"]],
+    dx: [["Pogos a dues cames, suaus", "3×10"], ["Corda", "3×30 s, suau"]],
+    ds: [["Trot a la gespa", "5×1 min, caminant 1 min entremig", true], ["Rem en zona 2", "30 min"], ["Mobilitat", "15 min"]] },
+  { resum: ["Elevacions a una cama: 3×6 amb 20 kg", "Soli assegut: 3×8 a 45 kg", "Dimecres: pogos baixos a una cama", "Dissabte: skipping A, trot continu i progressius al 60-70 %"],
+    besso: [["Elevacions a una cama a l'esglaó", "3×6 amb 20 kg"], ["Soli assegut a màquina", "3×8 a 45 kg"]],
+    dx: [["Pogos baixos a una cama", "3×8 per cama"]],
+    ds: [["Skipping A suau", "4×15 m", true], ["Trot continu", "10-15 min", true], ["Progressius de 40 m", "4-6 repeticions al 60-70 %, només si tot va sense dolor", true]] }
+];
+const PO = {
+  squat: ["2×5 a 80 kg", "2×6 a 80 kg", "2×5 a 82,5 kg", "2×6 a 82,5 kg"],
+  hip: ["2×6 amb 25 kg per costat", "2×6 amb 27,5 kg per costat", "2×6 amb 30 kg per costat", "2×6 amb 32,5 kg per costat"],
+  premsa: ["2×8 per cama amb 15 kg per costat", "2×8 per cama amb 20 kg per costat", "2×8 per cama amb 25 kg per costat", "2×8 per cama amb 30 kg per costat"],
+  add: ["2×12. Avui busca la càrrega: 12 repeticions amb 3-4 en reserva, i apunta-la", "2×12 amb la càrrega de la setmana 1", "2×12 amb una placa més", "2×12 amb la càrrega de la setmana 3"],
+  domin: ["2×5 amb 15 kg", "2×6 amb 15 kg", "2×5 amb 17,5 kg", "2×6 amb 17,5 kg"],
+  banca: ["2×5 a 70 kg", "2×6 a 70 kg", "2×5 a 72,5 kg", "2×6 a 72,5 kg"],
+  rem2: ["2×5 a 70 kg", "2×6 a 70 kg", "2×5 a 75 kg", "2×6 a 75 kg"],
+  bulgara: ["2×8 per cama amb 15 kg", "2×10 per cama amb 15 kg", "2×8 per cama amb 17,5 kg", "2×10 per cama amb 17,5 kg"],
+  curl: ["2×8 a 35 kg, punta del peu estirada", "2×8 a 35 kg, punta del peu estirada", "2×6 a 40 kg, tècnica normal", "2×8 a 40 kg, tècnica normal"],
+  fons: ["2×6 amb 10 kg", "2×5 amb 15 kg", "2×6 amb 15 kg", "2×5 amb 17,5 kg"],
+  rem1: ["2×8 per braç a 25 kg", "2×10 per braç a 25 kg", "2×8 per braç a 30 kg", "2×10 per braç a 30 kg"],
+  espatlla: ["2×8 amb 12,5 kg", "2×10 amb 12,5 kg", "2×8 amb 15 kg", "2×10 amb 15 kg"]
+};
+function diesOct(w) {
+  const s = OCT[w], b = s.besso.map(B), dx = s.dx.map(B);
+  return [
+    { nom: "Dilluns", tema: "Cama força i bessó", ex: [
+      ["Box squat balístic", "2×5 a 50 kg"], ["Box squat pesat", PO.squat[w]],
+      ["Hip thrust balístic", "2×5 amb 15 kg per costat"], ["Hip thrust pesat", PO.hip[w]],
+      ["Nòrdics", "3×5, pes corporal"], ["Premsa a una cama", PO.premsa[w] + ". Peu alt, empeny amb el taló"],
+      ["Adductors a màquina", PO.add[w]], ...b, BAAR_FI ] },
+    { nom: "Dimarts", tema: "Tors A", ex: [
+      ["Dominades explosives", "2×5, pes corporal"], ["Dominades amb llast", PO.domin[w]],
+      ["Press banca explosiu", "2×5 a 40 kg"], ["Press banca pesat", PO.banca[w]],
+      ["Rem assegut a dues mans, explosiu", "2×5 a 35 kg"], ["Rem assegut a dues mans, pesat", PO.rem2[w]],
+      ["Core", "3 sèries"], BAAR_T("de la banca i el rem") ] },
+    { nom: "Dimecres", tema: "Bessó, core i rem", ex: [
+      ...b, ...dx, ["Core antirotació", "3 sèries per costat"], ["Rem en zona 2", "35-40 min, ritme còmode, empenyent amb tot el peu"], BAAR ] },
+    { nom: "Dijous", tema: "Cama potència", nota: "Avui sense bessó pesat.", ex: [
+      ["Box squat explosiu", "4×3 a 50 kg"], ["Hip thrust explosiu", "3×5 amb 15 kg per costat"],
+      ["Búlgara", PO.bulgara[w]], ["Curl d'isquiotibials estirat", PO.curl[w]],
+      ["Flexors de maluc amb goma", "3×8 per cama"], BAAR_FI ] },
+    { nom: "Divendres", tema: "Tors B i bessó", nota: "Bíceps i tríceps: opcionals, 1-2 sèries al final.", ex: [
+      ["Fons explosius", "2×5, pes corporal"], ["Fons amb llast", PO.fons[w]],
+      ["Rem assegut a una mà", PO.rem1[w]], ["Press d'espatlla amb manuelles", PO.espatlla[w] + ", controlat"],
+      ["Core", "3 sèries"], ...b, BAAR_T("del rem i el press d'espatlla") ] },
+    { nom: "Dissabte", tema: "Cardio, tècnica i mobilitat", ex: [ ...s.ds, BAAR ] },
+    { nom: "Diumenge", tema: "Descans real", nota: "Res de càrrega. Com a molt, una passejada.", ex: [ BAAR ] }
+  ];
+}
+
+/* ---------- Novembre i desembre (setmanes 5-13) ---------- */
+const PN = {
+  squat: ["1×5 a 82,5 kg", "2×5 a 85 kg", "2×6 a 85 kg", "2×5 a 87,5 kg", "2×6 a 87,5 kg", "2×5 a 90 kg", "2×6 a 90 kg", "2×5 a 92,5 kg", "2×6 a 92,5 kg"],
+  hip: ["1×6 amb 32,5", "2×6 amb 35", "2×6 amb 37,5", "2×6 amb 40", "2×6 amb 40", "2×6 amb 42,5", "2×6 amb 42,5", "2×6 amb 45", "2×6 amb 45"],
+  premsa: [30, 32.5, 35, 37.5, 40, 40, 42.5, 42.5, 45],
+  curl: ["1×8 a 40 kg", "2×6 a 45 kg", "2×8 a 45 kg", "2×8 a 45 kg", "2×6 a 50 kg", "2×6 a 50 kg", "2×8 a 50 kg", "2×8 a 50 kg", "2×8 a 50 kg"],
+  soli: [45, 50, 55, 60, 60, 65, 65, 70, 70],
+  elev: ["3×6 amb 20 kg", "3×8 amb 20 kg", "3×6 amb 25 kg", "3×8 amb 25 kg", "3×6 amb 30 kg", "3×8 amb 30 kg", "3×8 amb 30 kg", "3×6 amb 35 kg", "3×6 amb 35 kg"],
+  domin: ["1×5 amb 17,5 kg", "2×5 amb 20 kg", "2×5 amb 20 kg", "2×6 amb 20 kg", "2×6 amb 20 kg", "2×5 amb 22,5 kg", "2×5 amb 22,5 kg", "2×6 amb 22,5 kg", "2×6 amb 22,5 kg"],
+  banca: ["1×5 a 72,5 kg", "2×6 a 72,5 kg", "2×5 a 75 kg", "2×5 a 75 kg", "2×6 a 75 kg", "2×6 a 75 kg", "2×5 a 77,5 kg", "2×5 a 77,5 kg", "2×5 a 77,5 kg"],
+  rem2: ["1×6 a 75 kg", "2×6 a 75 kg", "2×5 a 80 kg", "2×5 a 80 kg", "2×6 a 80 kg", "2×6 a 80 kg", "2×5 a 85 kg", "2×5 a 85 kg", "2×5 a 85 kg"],
+  fons: ["1×5 amb 17,5 kg", "2×6 amb 17,5 kg", "2×5 amb 20 kg", "2×5 amb 20 kg", "2×6 amb 20 kg", "2×6 amb 20 kg", "2×5 amb 22,5 kg", "2×5 amb 22,5 kg", "2×5 amb 22,5 kg"],
+  rem1: ["2×10 per braç a 30 kg", "2×8 per braç a 35 kg", "2×8 per braç a 35 kg", "2×10 per braç a 35 kg", "2×10 per braç a 35 kg", "2×8 per braç a 40 kg", "2×8 per braç a 40 kg", "2×10 per braç a 40 kg", "2×10 per braç a 40 kg"],
+  espatlla: ["2×10 amb 15 kg", "2×10 amb 15 kg", "2×8 amb 17,5 kg", "2×8 amb 17,5 kg", "2×10 amb 17,5 kg", "2×10 amb 17,5 kg", "2×10 amb 17,5 kg", "2×8 amb 20 kg", "2×8 amb 20 kg"],
+  dijous: ["r44", "z2", "c44", "z2", "c44", "z2", "c44", "z2", "z2"]
+};
+const kg = x => String(x).replace(".", ",");
+const ESCALF = ["Escalfament", "Trot 8 min, mobilitat dinàmica 5 min, pont de gluti 2×10 i elevacions de taló 2×10"];
+const CALMA = ["Tornada a la calma", "5 min de trot suau"];
+const tecnica = n => ["Tècnica", "2×20 m de cada: marxa A, skipping A, talons al gluti i turmells" + (n >= 7 ? ", més skipping B" : "")];
+const PROG = ["Progressius", "2×40 m, pujant fins al 85 %"];
+const PISTA = {
+  5: [["Pogos a dues cames", "3×10"], ["Progressius", "6×40 m al 70-80 %, 2 min de descans"]],
+  6: [["Pogos a dues cames", "3×12"], ["Progressius", "4×30 m al 85 %, 2 min"], ["Acceleracions des de parat", "4×20 m al 85 %, 3 min"]],
+  7: [["Pogos a una cama", "2×8 per cama"], PROG, ["Acceleracions des de parat", "6×20 m al 90 %, 3 min"]],
+  8: [["Pogos a una cama", "2×10 per cama"], ["Skips en alçada", "2×20 m"], PROG, ["Acceleracions llargues", "3×30 m al 90-95 %, 4 min"], ["Curses de 40 m", "2×40 m al 90 %, 5 min"]],
+  9: [["Pogos a una cama", "2×10 per cama"], ["Salts horitzontals a dues cames", "3×3, suaus"], PROG, ["Acceleracions llargues", "3×30 m al 95 %, 4 min"], ["Curses de 40 m", "2×40 m al 95 %, 5 min"]],
+  10: [["Pogos a una cama", "2×10 per cama"], ["Salts horitzontals a dues cames", "3×4"], PROG, ["Llançats de 20 m", "3 repeticions amb 20 m d'impuls, al 90-95 %, 5 min"], ["Curses de 40 m", "2×40 m al 95 %, 5 min"]],
+  11: [["Gambades", "3×20 m"], PROG, ["Llançats de 20 m", "4 repeticions amb 20 m d'impuls, al 95-100 %, 5 min"], ["Cursa de 50 m", "1×50 m al 95 %"]],
+  12: [["Gambades", "3×20 m"], PROG, ["Llançats de 20 m", "4 repeticions amb 25 m d'impuls, al 100 %, 5-6 min"], ["Curses de 50 m", "2×50 m al 95 %, 6 min"]],
+  14: [["Pogos a dues cames", "3×10"], ["Progressius", "6×40 m al 80-90 %. Cap esforç màxim"]],
+  15: [["Gambades", "3×20 m"], ["Salts horitzontals a dues cames", "3×4"], PROG, ["Llançats de 20 m", "4 repeticions amb 20 m d'impuls, al 95 %, 5 min"]],
+  16: [["Gambades", "3×20 m"], ["Salts horitzontals a dues cames", "3×4"], PROG, ["Llançats de 20 m", "4 repeticions amb 25 m d'impuls, al 100 %, 5-6 min"], ["Cursa de 60 m", "1×60 m al 90 %"]],
+  17: [["Gambades", "3×20 m"], ["Salts horitzontals a dues cames", "3×4"], PROG, ["Llançats de 30 m", "3 repeticions amb 25 m d'impuls, al 100 %, 6 min"], ["Curses de 60 m", "2×60 m al 95 %, 8 min"]]
+};
+const PDIV = {
+  8: [["Acceleracions des de parat", "4×20 m al 90 %, 3 min"], ["Acceleracions llargues", "2×30 m al 90 %, 4 min"]],
+  9: [["Sortides de tres suports", "4×10 m, 2 min"], ["Acceleracions", "4×20 m al 95 %, 3 min"]],
+  10: [["Sortides de tacs", "4×10 m, 2 min"], ["Sortides de tacs", "3×20 m, 3 min"]],
+  11: [["Sortides de tacs", "4×10 m, 2 min"], ["Sortides de tacs", "4×20 m, 3 min"], ["Sortides de tacs", "2×30 m, 4 min"]],
+  12: [["Sortides de tacs", "3×10 m, 2 min"], ["Sortides de tacs", "3×20 m, 3 min"], ["Sortides de tacs", "2×30 m, 4 min"], ["Trineu lleuger", "3×15 m amb 5 kg, només si el bessó està igualat amb l'altre"]]
+};
+const PISTA_TARDA = ["Pista: escalfament i tècnica", "Trot 8 min, mobilitat, i 2×20 m de marxa A, skipping A i B, talons al gluti i turmells"];
+function diaPista(n, tema) {
+  return { nom: "Diumenge", tema: tema || "Pista", nota: "A última hora del matí. " + (n <= 6 ? "Sabatilles, sense claus." : "Claus només a les acceleracions."),
+    ex: [ESCALF, tecnica(n), ...(PISTA[n] || []), CALMA, BAAR] };
+}
+function cardioDijous(t) {
+  if (t === "r44") return ["Rem 4×4", "4 min forts i 3 min suaus, 4 vegades"];
+  if (t === "c44") return ["4×4 noruec a la cinta", "4 min forts i 3 min suaus, 4 vegades. Abans del bloc de bessó"];
+  return ["Rem en zona 2", "30 min, suau"];
+}
+function blocBesso(k, lleuger) {
+  const rot = k >= 4 ? "2×10 per posició amb 10 kg" : "2×10 per posició, pes corporal";
+  const b = [B(["Elevacions a una cama a l'esglaó", (lleuger ? "2×8 amb el pes de dimarts: " : "") + PN.elev[k]]),
+    B(["Soli assegut a màquina", "3×8 a " + PN.soli[k] + " kg"])];
+  if (!lleuger) b.push(B(["Elevacions amb el peu girat", rot + ": punta cap endins i cap enfora"]));
+  return b;
+}
+function diesNov(n) {
+  const k = n - 5, bal = n <= 8 ? "52,5" : "55", hb = n <= 8 ? "17,5" : "20", desc = n === 5, duo = n >= 8;
+  const cardioDt = duo && (n === 9 || n === 11) ? ["4×4 noruec a la cinta", "4 min forts i 3 min suaus, 4 vegades. Abans del bloc de bessó"] : ["Rem en zona 2", "40 min, ritme còmode"];
+  const cama = [
+    ["Box squat balístic", "2×5 a " + bal + " kg"], ["Box squat pesat", PN.squat[k]],
+    ["Hip thrust balístic", "2×5 amb " + hb + " kg per costat"], ["Hip thrust pesat", PN.hip[k] + " kg per costat"],
+    ["Nòrdics", (n <= 8 ? "3×5" : "3×6") + ", pes corporal"], ["Premsa a una cama", "2×8 per cama amb " + kg(PN.premsa[k]) + " kg per costat"],
+    ["Curl d'isquiotibials estirat", PN.curl[k]],
+    ["Adductors a màquina", "2×12" + (k % 4 >= 2 ? " amb una placa més que fa dues setmanes" : " amb la càrrega de la setmana passada")]];
+  if (duo) cama.push(["Flexors de maluc amb goma", "3×8 per cama"]);
+  const llanc = [
+    ["Llançament de baló enrere per sobre del cap", "4 llançaments amb 5 kg, 45-60 s entre cadascun" + (n <= 6 ? ". Sense enlairar-te de terra" : "")],
+    ["Llançament de baló endavant des de baix", "4 llançaments amb 5 kg"],
+    ["Llançament de pit amb caiguda endavant", "4 llançaments amb 5 kg"]];
+  const torsCurt = [["Fons explosius", "2×5, pes corporal"], ["Fons amb llast", PN.fons[k]],
+    ["Rem assegut a una mà", PN.rem1[k]], ["Press d'espatlla amb manuelles", PN.espatlla[k] + ", controlat"]];
+  const divendres = duo
+    ? { nom: "Divendres", tema: "Tors curt al matí, pista a la tarda", nota: "Pista d'acceleració a la tarda. Claus només a les curses.", ex: [
+        ...llanc, ...torsCurt, PISTA_TARDA, ...(PDIV[n] || []), CALMA, BAAR ] }
+    : { nom: "Divendres", tema: "Cama potència i tors curt", nota: "Poc volum i res pesat de cama: diumenge hi ha pista.", ex: [
+        ...llanc, ["Box squat explosiu", "4×3 a " + bal + " kg"], ["Hip thrust explosiu", "3×5 amb " + hb + " kg per costat"],
+        ["Flexors de maluc amb goma", "3×8 per cama"], ...torsCurt, BAAR_FI ] };
+  const dijous = duo
+    ? { nom: "Dijous", tema: "Baix", nota: "Demà hi ha pista: res de bessó pesat.", ex: [ ["Rem en zona 2", "30 min, suau"], ["Core i mobilitat", "15 min"], BAAR ] }
+    : { nom: "Dijous", tema: "Cardio, bessó i core", ex: [ cardioDijous(PN.dijous[k]), ...blocBesso(k, true), ["Core i mobilitat", "15 min"], BAAR ] };
+  const dies = [
+    { nom: "Dilluns", tema: "Tors complet", ex: [
+      ["Dominades explosives", "2×5, pes corporal"], ["Dominades amb llast", PN.domin[k]],
+      ["Press banca explosiu", "2×5 a 40 kg"], ["Press banca pesat", PN.banca[k]],
+      ["Rem assegut a dues mans, explosiu", "2×5 a 35 kg"], ["Rem assegut a dues mans, pesat", PN.rem2[k]],
+      ["Core", "3 sèries"], BAAR_T("de la banca i el rem") ] },
+    { nom: "Dimarts", tema: "Bessó, core i cardio", ex: [
+      cardioDt, ...blocBesso(k, false), ["Core antirotació", "3 sèries per costat"], BAAR ] },
+    { nom: "Dimecres", tema: "Cama força", ex: [ ...cama, BAAR_FI ] },
+    dijous, divendres,
+    { nom: "Dissabte", tema: "Descans", nota: duo ? "Entre dos dies de pista: descans real. Com a molt, mobilitat i una passejada." : "Descans per arribar fresc a la pista. Com a molt, mobilitat i una passejada.", ex: [ ["Mobilitat", "15 min"], BAAR ] },
+    diaPista(n, duo ? "Pista, velocitat" : "Pista")
+  ];
+  if (desc) dies.forEach(d => { if (!d.nota) d.nota = "Setmana de descàrrega: una sola sèrie pesada."; });
+  return dies;
+}
+
+/* ---------- FMD i gener ---------- */
+const diaFmd = (nom, num) => ({ nom, tema: "FMD, dia " + num, fmd: num, nota: "Descans total. Res d'entrenament, ni isomètrics.", ex: [
+  ["Caminada suau", "20-30 min"], ["Estiraments", "10-15 min, suaus"], ["Sal", "Afegeix sal a l'aigua o al brou des del matí"] ] });
+function dies13() {
+  const d = diesNov(13);
+  return [d[0], d[1], d[2], d[3], diaFmd("Divendres", 1), diaFmd("Dissabte", 2), diaFmd("Diumenge", 3)];
+}
+function dies14() {
+  return [
+    diaFmd("Dilluns", 4), diaFmd("Dimarts", 5),
+    { nom: "Dimecres", tema: "Transició", trans: true, nota: "Encara sense entrenar.", ex: [ ["Caminada suau", "30 min"], ["Estiraments", "10-15 min"] ] },
+    { nom: "Dijous", tema: "Tors, tornada", nota: "Pesos al 85-90 % dels de desembre.", ex: [
+      ["Dominades explosives", "2×5, pes corporal"], ["Dominades amb llast", "1×5 amb 20 kg"],
+      ["Press banca explosiu", "2×5 a 40 kg"], ["Press banca pesat", "1×5 a 70 kg"],
+      ["Rem assegut a dues mans, explosiu", "2×5 a 35 kg"], ["Rem assegut a dues mans, pesat", "1×5 a 75 kg"],
+      ["Core", "3 sèries"], BAAR_T("de la banca i el rem") ] },
+    { nom: "Divendres", tema: "Cama, tornada", nota: "Una sola sèrie pesada, al 85-90 %.", ex: [
+      ["Box squat balístic", "2×5 a 50 kg"], ["Box squat pesat", "1×5 a 80 kg"],
+      ["Hip thrust balístic", "2×5 amb 17,5 kg per costat"], ["Hip thrust pesat", "1×6 amb 40 kg per costat"],
+      ["Nòrdics", "2×5, pes corporal"], ["Curl d'isquiotibials estirat", "1×8 a 45 kg"], BAAR_FI ] },
+    { nom: "Dissabte", tema: "Rem i bessó", ex: [
+      ["Rem en zona 2", "30 min, suau"], B(["Elevacions a una cama a l'esglaó", "2×8 amb 25 kg"]), B(["Soli assegut a màquina", "2×8 a 60 kg"]), BAAR ] },
+    diaPista(14, "Pista suau")
+  ];
+}
+const PG = {
+  squat: ["1×5 a 90 kg", "1×5 a 92,5 kg", "1×5 a 92,5 kg"], bal: ["57,5", "60", "60"],
+  hip: ["1×6 amb 45", "1×6 amb 47,5", "1×6 amb 47,5"],
+  tacs: [
+    [["Sortides de tacs", "4×10 m, 2 min"], ["Sortides de tacs", "4×20 m, 3 min"], ["Sortides de tacs", "2×30 m, 4 min"]],
+    [["Sortides de tacs", "3×10 m, 2 min"], ["Sortides de tacs", "4×20 m, 3 min"], ["Sortides de tacs", "3×30 m, 4 min"]],
+    [["Sortides de tacs", "2×10 m, 2 min"], ["Sortides de tacs", "3×20 m, 3 min"], ["Sortides de tacs", "3×30 m, 4 min"], ["Sortida de tacs llarga", "1×40 m, 5 min"]]
+  ]
+};
+function diesGen(n) {
+  const k = n - 15;
+  return [
+    { nom: "Dilluns", tema: "Tors complet", ex: [
+      ["Dominades explosives", "2×5, pes corporal"], ["Dominades amb llast", "2×5 amb 22,5 kg"],
+      ["Press banca explosiu", "2×5 a 40 kg"], ["Press banca pesat", "2×5 a 77,5 kg"],
+      ["Rem assegut a dues mans, explosiu", "2×5 a 35 kg"], ["Rem assegut a dues mans, pesat", "2×5 a 85 kg"],
+      ["Core", "3 sèries"], BAAR_T("de la banca i el rem") ] },
+    { nom: "Dimarts", tema: "Bessó, core i cardio", ex: [
+      k === 1 ? ["Rem en zona 2", "40 min, ritme còmode"] : ["4×4 noruec a la cinta", "4 min forts i 3 min suaus, 4 vegades. Abans del bloc de bessó"],
+      B(["Elevacions a una cama a l'esglaó", "3×6 amb 35 kg"]),
+      B(["Elevacions amb el peu girat", "2×10 per posició amb 10 kg: punta cap endins i cap enfora"]),
+      ["Core antirotació", "3 sèries per costat"], BAAR ] },
+    { nom: "Dimecres", tema: "Cama, conversió a potència", nota: "Una sola sèrie pesada i més feina balística.", ex: [
+      ["Box squat balístic", "3×4 a " + PG.bal[k] + " kg"], ["Box squat pesat", PG.squat[k]],
+      ["Hip thrust balístic", "3×5 amb 22,5 kg per costat"], ["Hip thrust pesat", PG.hip[k] + " kg per costat"],
+      ["Premsa a una cama, explosiva", "2×6 per cama amb 40 kg per costat"],
+      ["Nòrdics", "2×6, pes corporal"], ["Curl d'isquiotibials estirat", "2×6 a 50 kg"],
+      B(["Soli assegut a màquina", "3×8 a 70 kg"]), BAAR_FI ] },
+    { nom: "Dijous", tema: "Baix", nota: "Demà hi ha pista: res de bessó pesat.", ex: [
+      ["Rem en zona 2", "30 min, suau"], ["Core i mobilitat", "15 min"], BAAR ] },
+    { nom: "Divendres", tema: "Tors curt al matí, pista a la tarda", ex: [
+      ["Llançaments de baló", "3 de cada tipus amb 5 kg: enrere, endavant i de pit"],
+      ["Fons explosius", "2×5, pes corporal"], ["Fons amb llast", "1×5 amb 22,5 kg"],
+      ["Rem assegut a una mà", "1×8 per braç a 40 kg"], ["Press d'espatlla amb manuelles", "1×8 amb 20 kg"],
+      ["Pista: escalfament i tècnica", "Trot 8 min, mobilitat, i 2×20 m de marxa A, skipping A i B, talons al gluti i turmells"],
+      ...PG.tacs[k], CALMA, BAAR ] },
+    { nom: "Dissabte", tema: "Descans", nota: "Entre dos dies de pista: descans real. El trail només substitueix la pista de divendres si se suspèn.", ex: [ ["Mobilitat", "15 min"], BAAR ] },
+    diaPista(n, "Pista, velocitat llançada")
+  ];
+}
+function diesDe(n) {
+  const d = n <= 4 ? diesOct(n - 1) : n <= 12 ? diesNov(n) : n === 13 ? dies13() : n === 14 ? dies14() : diesGen(n);
+  return ambMenjar(d, n);
+}
+
+/* ---------- Menjar i suplements ---------- */
+const BOL = "Iogurt de soja, 30 g de proteïna vegetal, fruits vermells o magrana, nous, canyella i cacau, amb ";
+const BASE_DIN = "Pot de llegum amb amanida, hummus i alvocat, més 100 g de tempeh o una llauna de peix. ";
+const BASE_SOP = "Llauna de melva, verat o sardines amb verdura, més iogurt de soja amb 15 g de proteïna vegetal, o 100 g de tempeh o tofu";
+const OUS = "3 ous a la planxa, 1 torrada i iogurt de soja amb 15 g de proteïna vegetal";
+function ambMenjar(dies, n) {
+  const alts = altSetmana(n), seg = altSetmana(Math.min(n + 1, 17)), mant = MANT.includes(n), oct = n <= 4;
+  dies.forEach((d, i) => {
+    const a = alts[i], dema = i < 6 ? alts[i + 1] : seg[0], cap = i >= 5;
+    const data = dataDia(n, i), multi = Math.floor(data.getTime() / 86400000) % 2 === 0;
+    if (a === F) {
+      d.titolMenjar = "Menjar, FMD dia " + d.fmd;
+      d.menjar = [["Tot el dia", "Segueix el teu protocol FMD, amb sal des del primer dia"], ["Suplements", "Pausa de creatina, omega-3, proteïna i col·lagen fins dijous 7. Només el que inclogui el protocol"]];
+      return;
+    }
+    if (a === T) {
+      d.titolMenjar = "Menjar, dia de transició";
+      d.menjar = [["Tot el dia", "Realimentació suau: sopes i cremes de verdura, llegum, arròs, fruita i una mica de peix al sopar. Quantitats petites"], ["Suplements", "Torna a la creatina i la vitamina D"]];
+      return;
+    }
+    const alt = mant ? 1 : a, demaAlt = mant ? 1 : (dema === 1 ? 1 : 0);
+    d.titolMenjar = mant ? "Menjar, setmana de manteniment" : "Menjar, dia " + (alt ? "alt" : "baix") + " en carbohidrats";
+    const ousAvui = cap && (oct || i === 5);
+    const esm = ousAvui ? OUS : BOL + (alt ? "60 g de civada i un plàtan" : "30 g de civada");
+    let din = BASE_DIN + (mant ? "Afegeix pa o arròs, i una fruita de postres" : alt ? "De postres, una fruita" : "Sense postres ni pa");
+    if (cap) din = (!oct && i === 6) ? "Després de la pista: lliure i sa, uns 700 kcal, amb 35-40 g de proteïna i arròs, pasta o patata"
+      : "Lliure i sa, uns 600 kcal, amb 35-40 g de proteïna: peix, tempeh o llegum";
+    let sop = BASE_SOP + (demaAlt ? ", amb 2 torrades amb hummus" : ", sense torrades");
+    if (i === 5) sop = oct ? "Lliure i sa, uns 500 kcal, amb 35-40 g de proteïna" : "Mitja pizza casolana amb tonyina o anxoves i amanida: demà hi ha pista";
+    if (oct && i === 6) sop = "Mitja pizza casolana amb tonyina o anxoves i amanida, o el sopar habitual amb 2 torrades";
+    if (dema === F) sop = "Últim sopar abans de la FMD: normal, sense excessos";
+    d.menjar = [["Esmorzar", esm], ["Dinar", din], ["Sopar", sop],
+      ["Suplements", "Creatina i vitamina D a l'esmorzar, 1 omega-3 al dinar i 1 al sopar" + (multi ? ". Avui toca multivitamínic" : "")]];
+  });
+  return dies;
+}
+
+/* ---------- Resum de la setmana ---------- */
+function resum(n) {
+  const kcal = MANT.includes(n) ? "Manteniment: uns 2.000 kcal cada dia" : "Dèficit: uns 1.900 kcal els dies alts i 1.500-1.600 els baixos";
+  if (n <= 4) return { titol: "Setmana " + n + ", recuperació del bessó", linies: [...OCT[n - 1].resum, kcal] };
+  if (n === 5) return { titol: "Setmana 5, descàrrega i tornada a la pista", linies: ["Mateixos pesos que la setmana 4, amb una sola sèrie pesada", "Diumenge, primera pista: 6×40 m al 70-80 %", "Nova setmana: pista diumenge, cama dimecres i divendres", kcal] };
+  if (n <= 8) return { titol: "Setmana " + n + ", força màxima", linies: ["Box squat pesat: " + PN.squat[n - 5], n === 8 ? "Comencen els dos dies de pista: divendres a la tarda i diumenge al matí, si el bessó ha respost bé" : "Pista de diumenge: acceleracions de 20-30 m, pujant d'intensitat", "Bessó: s'hi afegeixen les elevacions amb el peu girat", kcal] };
+  if (n <= 12) return { titol: "Setmana " + n + ", pic de força", linies: ["Box squat pesat: " + PN.squat[n - 5], "Divendres a la tarda: acceleració" + (n >= 10 ? " amb tacs" : "") + (n === 12 ? " i trineu lleuger" : ""), "Diumenge al matí: velocitat" + (n >= 10 ? ", amb curses llançades" : ""), n === 12 ? "Setmana de Nadal. " + kcal + "; els àpats de festa substitueixen el dinar o el sopar" : kcal] };
+  if (n === 13) return { titol: "Setmana 13, final d'any i inici de la FMD", linies: ["De dilluns a dijous, entrenament normal: últim dia pesat dimecres", "Divendres 1 de gener comença la FMD: descans total", kcal + " fins dijous"] };
+  if (n === 14) return { titol: "Setmana 14, FMD i tornada", linies: ["Dilluns i dimarts: dies 4 i 5 de la FMD", "Dimecres: transició, realimentació suau", "Dijous a diumenge: pesos al 85-90 %, cap sprint màxim", "Proteïna a 110 g des de dijous. El pes que compta és la mitjana de la setmana 15"] };
+  return { titol: "Setmana " + n + ", conversió a potència", linies: ["Una sola sèrie pesada i més feina balística", "Dos dies de pista: tacs divendres a la tarda i velocitat llançada diumenge", "Torso en manteniment", kcal] };
+}
+
+/* ---------- Estat, compte i pintat ---------- */
+const CLAU = "entreno-v1";
+const SB = window.supabase.createClient("https://mwpyxlderrpxqvloclre.supabase.co", "sb_publishable_WrjF9wv1DyRju4cQp6BJqw_KA6pr9n6");
+let fets = {}, reals = {}, pesos = [], setmana = 1, usuari = null, avis = "";
+const $ = id => document.getElementById(id);
+const esc = t => String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const iso = d => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+function setmanaActual() {
+  const dif = Math.floor((new Date() - INICI) / (7 * 86400000)) + 1;
+  return Math.max(1, Math.min(17, dif));
+}
+function diaAvui() {
+  const d = Math.floor((new Date() - dataDia(setmana, 0)) / 86400000);
+  return d >= 0 && d < 7 ? d : -1;
+}
+function carregaLocal() { try { const v = localStorage.getItem(CLAU); if (v) fets = JSON.parse(v) || {}; } catch (e) {} }
+function desaLocal() { try { localStorage.setItem(CLAU, JSON.stringify(fets)); } catch (e) {} }
+function pintaEstat() {
+  $("estat").textContent = usuari ? "Les marques es guarden al teu compte." : "Sense sessió: les marques només es guarden en aquest dispositiu.";
+}
+async function carregaRemot() {
+  const [p, c, w] = await Promise.all([
+    SB.from("progres").select("clau"),
+    SB.from("carregues").select("clau,valor"),
+    SB.from("pes_corporal").select("dia,kg").order("dia", { ascending: false }).limit(21)
+  ]);
+  if (p.error || c.error || w.error) { avis = "No s'han pogut carregar les dades. Torna-ho a provar."; pintaCompte(); return; }
+  if (p.data.length === 0 && Object.keys(fets).length) {
+    await SB.from("progres").upsert(Object.keys(fets).map(clau => ({ clau })));
+  } else {
+    fets = {}; p.data.forEach(r => { fets[r.clau] = 1; }); desaLocal();
+  }
+  reals = {}; c.data.forEach(r => { reals[r.clau] = r.valor; });
+  pesos = w.data;
+  pinta();
+}
+async function marca(id, fet) {
+  desaLocal();
+  if (!usuari) return;
+  const r = fet ? await SB.from("progres").upsert({ clau: id }) : await SB.from("progres").delete().eq("clau", id);
+  if (r.error) { avis = "No s'ha pogut guardar l'última marca."; pintaCompte(); }
+}
+async function desaReal(id, exercici, valor) {
+  valor = valor.trim();
+  if (valor) reals[id] = valor; else delete reals[id];
+  const r = valor ? await SB.from("carregues").upsert({ clau: id, exercici, valor }) : await SB.from("carregues").delete().eq("clau", id);
+  if (r.error) { avis = "No s'ha pogut guardar el pes real."; pintaCompte(); }
+}
+function mitjana(des, fins) {
+  const v = pesos.filter(r => r.dia >= des && r.dia <= fins).map(r => Number(r.kg));
+  return v.length ? { m: v.reduce((a, b) => a + b, 0) / v.length, n: v.length } : null;
+}
+function pintaPes() {
+  const s = $("pes");
+  s.hidden = !usuari;
+  if (!usuari) return;
+  const avui = new Date(), d = n => { const x = new Date(avui); x.setDate(x.getDate() - n); return iso(x); };
+  const a = mitjana(d(6), d(0)), b = mitjana(d(13), d(7));
+  const f = x => x.toFixed(1).replace(".", ",");
+  const avuiReg = pesos.find(r => r.dia === d(0));
+  let txt = a ? "Mitjana dels últims 7 dies: " + f(a.m) + " kg (" + a.n + " dies)." : "Encara no hi ha pesades aquesta setmana.";
+  if (a && b) txt += " Setmana anterior: " + f(b.m) + " kg. Diferència: " + (a.m - b.m > 0 ? "+" : "") + f(a.m - b.m) + " kg.";
+  s.innerHTML = '<h2 class="titol-font">Pes en dejú</h2><div class="camps"><input id="kg" type="number" inputmode="decimal" step="0.1" min="40" max="150" aria-label="Pes d\'avui en quilos" placeholder="Pes d\'avui, en kg" value="' + (avuiReg ? Number(avuiReg.kg) : "") + '"><button class="boto" id="desaPes">Desa</button></div><p class="avis">' + txt + "</p>";
+  $("desaPes").onclick = async () => {
+    const kg = parseFloat(String($("kg").value).replace(",", "."));
+    if (!(kg > 40 && kg < 150)) return;
+    const r = await SB.from("pes_corporal").upsert({ dia: d(0), kg });
+    if (r.error) { avis = "No s'ha pogut guardar el pes."; pintaCompte(); return; }
+    pesos = pesos.filter(x => x.dia !== d(0)); pesos.unshift({ dia: d(0), kg });
+    pintaPes();
+  };
+}
+function pintaCompte() {
+  const s = $("compte");
+  if (usuari) {
+    s.innerHTML = '<div class="camps"><span style="flex:1">Sessió: ' + esc(usuari.email) + '</span><button class="boto sec" id="surt">Surt</button></div>' + (avis ? '<p class="avis">' + esc(avis) + "</p>" : "");
+    $("surt").onclick = () => SB.auth.signOut();
+  } else {
+    s.innerHTML = '<h2 class="titol-font">Entra per guardar els avenços</h2><div class="camps"><input id="correu" type="email" autocomplete="email" aria-label="Correu" placeholder="Correu"><input id="clau" type="password" autocomplete="current-password" aria-label="Contrasenya" placeholder="Contrasenya"></div><div class="camps" style="margin-top:8px"><button class="boto" id="entra">Entra</button><button class="boto sec" id="crea">Crea el compte</button></div><p class="avis">' + esc(avis || "Sense sessió, el pla funciona igual però les marques queden només en aquest dispositiu.") + "</p>";
+    const cred = () => ({ email: $("correu").value.trim(), password: $("clau").value });
+    $("entra").onclick = async () => {
+      const r = await SB.auth.signInWithPassword(cred());
+      if (r.error) { avis = "No s'ha pogut entrar: revisa el correu i la contrasenya, i que hagis confirmat el compte."; pintaCompte(); }
+    };
+    $("crea").onclick = async () => {
+      const c = cred();
+      if (c.password.length < 8) { avis = "La contrasenya ha de tenir almenys 8 caràcters."; pintaCompte(); return; }
+      const r = await SB.auth.signUp({ email: c.email, password: c.password, options: { emailRedirectTo: location.origin } });
+      avis = r.error ? "No s'ha pogut crear el compte: " + r.error.message : "Compte creat. Obre el correu de confirmació i després entra aquí.";
+      pintaCompte();
+    };
+  }
+  pintaPes(); pintaEstat();
+}
+function pintaNav() {
+  const c = $("carrers"); c.innerHTML = "";
+  const grup = GRUPS.find(g => g.setmanes.includes(setmana));
+  GRUPS.forEach(g => {
+    const b = document.createElement("button");
+    b.setAttribute("role", "tab"); b.setAttribute("aria-selected", g === grup ? "true" : "false");
+    b.innerHTML = '<span class="num">' + g.nom + '</span><span class="dates">' + g.sub + "</span>";
+    b.onclick = () => { setmana = g.setmanes[0]; pinta(); };
+    c.appendChild(b);
+  });
+  const s = $("setmanes"); s.innerHTML = "";
+  grup.setmanes.forEach(n => {
+    const b = document.createElement("button");
+    b.setAttribute("role", "tab"); b.setAttribute("aria-selected", n === setmana ? "true" : "false");
+    b.textContent = etiqueta(n);
+    b.setAttribute("aria-label", "Setmana " + n + ", " + etiqueta(n));
+    b.onclick = () => { setmana = n; pinta(); };
+    s.appendChild(b);
+  });
+}
+function pinta() {
+  pintaNav();
+  const r = resum(setmana);
+  $("resum").innerHTML = '<h2 class="titol-font">' + r.titol + "</h2><ul>" + r.linies.map(x => "<li>" + x + "</li>").join("") + "</ul>";
+  const cont = $("dies"); cont.innerHTML = "";
+  const avui = diaAvui();
+  diesDe(setmana).forEach((d, di) => {
+    const det = document.createElement("details");
+    det.className = "dia" + (di === avui ? " avui" : "");
+    if (di === avui) det.open = true;
+    const sum = document.createElement("summary");
+    sum.innerHTML = '<span class="nom titol-font">' + d.nom + '</span><span class="tema">' + d.tema + '</span><span class="compte"></span>';
+    det.appendChild(sum);
+    const ll = document.createElement("div"); ll.className = "llista";
+    if (d.nota) { const nd = document.createElement("div"); nd.className = "nota-dia"; nd.textContent = d.nota; ll.appendChild(nd); }
+    if (d.menjar) {
+      const m = document.createElement("div"); m.className = "menjar";
+      m.innerHTML = "<strong>" + d.titolMenjar + "</strong>" + d.menjar.map(x => "<p><b>" + x[0] + ":</b> " + x[1] + "</p>").join("");
+      ll.appendChild(m);
+    }
+    const actualitza = () => {
+      const k = d.ex.filter((_, ei) => fets["s" + setmana + "d" + di + "e" + ei]).length;
+      sum.querySelector(".compte").textContent = k + " de " + d.ex.length;
+      det.classList.toggle("complet", k === d.ex.length);
+    };
+    d.ex.forEach((e, ei) => {
+      const id = "s" + setmana + "d" + di + "e" + ei;
+      const fila = document.createElement("div"); fila.className = "fila";
+      const lab = document.createElement("label"); lab.className = "ex" + (e[2] ? " besso-ex" : "");
+      const inp = document.createElement("input"); inp.type = "checkbox"; inp.checked = !!fets[id];
+      inp.onchange = () => { if (inp.checked) fets[id] = 1; else delete fets[id]; actualitza(); marca(id, inp.checked); };
+      const t = document.createElement("div"); t.className = "txt";
+      t.innerHTML = "<b>" + e[0] + "</b><span>" + e[1] + "</span>";
+      lab.appendChild(inp); lab.appendChild(t); fila.appendChild(lab);
+      if (usuari) {
+        const real = document.createElement("input"); real.className = "real"; real.type = "text";
+        real.placeholder = "Fet real, si és diferent"; real.setAttribute("aria-label", "Fet real a " + e[0]);
+        real.value = reals[id] || "";
+        real.onchange = () => desaReal(id, e[0], real.value);
+        fila.appendChild(real);
+      }
+      ll.appendChild(fila);
+    });
+    det.appendChild(ll); cont.appendChild(det); actualitza();
+  });
+  pintaEstat();
+}
+$("reinicia").onclick = async () => {
+  Object.keys(fets).forEach(k => { if (k.startsWith("s" + setmana + "d")) delete fets[k]; });
+  desaLocal(); pinta();
+  if (usuari) await SB.from("progres").delete().like("clau", "s" + setmana + "d%");
+};
+carregaLocal(); setmana = setmanaActual(); pinta(); pintaCompte();
+SB.auth.onAuthStateChange((_e, sessio) => {
+  const nou = sessio ? sessio.user : null;
+  const canvi = (nou && nou.id) !== (usuari && usuari.id);
+  usuari = nou; avis = "";
+  pintaCompte();
+  if (canvi) setTimeout(() => { if (usuari) carregaRemot(); else { reals = {}; pesos = []; pinta(); } }, 0);
+});
+</script>
+</body>
+</html>
