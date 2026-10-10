@@ -123,6 +123,7 @@
       <li>Els pesos de novembre a gener són una projecció: a final de cada mes es corregeixen amb les xifres reals.</li>
       <li>Sèries pesades: acaba amb 1-2 repeticions en reserva. Sèries explosives: no es puja el pes, es puja la velocitat.</li>
       <li>Autoregulació: si les explosives van lentes, fes només una pesada o cap. Escalfament llarg, amb 2-3 sèries d'aproximació ràpides.</li>
+      <li>Flexió de maluc a politja: la setmana 2 es busca la càrrega; després puja una placa cada dues setmanes si completes les repeticions.</li>
       <li>Descansos: 3 min entre sèries pesades, 2 min entre explosives, 1-2 min en accessoris i bessó.</li>
     </ul>
     <h3>Bessó i pista</h3>
@@ -133,6 +134,10 @@
       <li>Amb fred, malles llargues i roba d'abric fins a les curses. Si el bessó protesta, repeteix la setmana de pista en lloc d'avançar.</li>
       <li>Dos dies de pista des de la setmana 8, divendres a la tarda i diumenge al matí, si les pistes de les setmanes 5 a 7 han anat sense molèsties. Si no, continua amb una sola pista fins que el bessó estigui clarament bé.</li>
       <li>Trail: amb dos dies de pista no hi cap. Només en lloc de la pista de divendres si se suspèn, i de nou a la primavera.</li>
+      <li>Dribbles: cursa d'amplitud mínima, recolzant sota el maluc. El peu passa per sobre del turmell, del bessó o del genoll de l'altra cama.</li>
+      <li>Gambades de cama recta: genolls gairebé estirats, estirant el terra cap enrere. Skips de distància: llargs i baixos, buscant avançar.</li>
+      <li>Test de bessó cada dues setmanes. Gambades i trineu, només si la cama lesionada fa almenys el 90 % de les repeticions de l'altra.</li>
+      <li>Mesura: CMJ cada dimecres i temps dels llançats. Si el CMJ cau més d'un 7 % respecte a la teva mitjana, treu una sèrie pesada.</li>
       <li>Inflor visible, calor o dolor en repòs al panxell: metge sense esperar.</li>
       <li>Segona tanda d'isomètrics a la tarda o al vespre, almenys 6 hores després, amb el col·lagen 60 min abans.</li>
     </ul>
@@ -142,6 +147,7 @@
       <li>Dèficit en cicles: 3 setmanes de dèficit i 1 de manteniment. Dèficit: uns 1.900 kcal els dies alts i 1.500-1.600 els baixos. Manteniment: uns 2.000 cada dia.</li>
       <li>Ous: només als esmorzars de cap de setmana, màxim 6 per setmana.</li>
       <li>La pizza casolana, el vespre abans d'un dia alt: diumenge a l'octubre, dissabte des del novembre. Mitja pizza amb amanida.</li>
+      <li>La setmana 11 és de manteniment: coincideix amb el pic de força i els primers esprints al 100 %.</li>
       <li>Control: pes mitjà de 7 dies en dejú, plecs mensuals i cintura. Si baixa menys de 150 g per setmana, treu fruits secs; si baixa més de 400 g, afegeix hidrats els dies alts.</li>
     </ul>
     <h3>Recuperació</h3>
@@ -176,7 +182,7 @@ const GRUPS = [
   { nom: "Des", sub: "Pic de força", setmanes: [9, 10, 11, 12, 13] },
   { nom: "Gen", sub: "FMD i potència", setmanes: [14, 15, 16, 17] }
 ];
-const MANT = [4, 8, 12, 13, 14];
+const MANT = [4, 8, 11, 12, 13, 14];
 const F = "fmd", T = "trans";
 function altSetmana(n) {
   if (n <= 4) return [1, 1, 0, 1, 1, 0, 0];
@@ -196,6 +202,26 @@ const BAAR_FI = ["Isomètrics del protocol Baar", "Al final de la sessió, no en
 const BAAR_T = x => ["Isomètrics del protocol Baar", "Als descansos " + x + ": 30 s per cama i 2 min de descans, 4 vegades"];
 const B = e => [e[0], e[1], true];
 
+const FLEX = {
+  2: "2×8 per cama. Avui busca la càrrega: 8 repeticions amb 2-3 en reserva, i apunta-la", 3: "2×8 per cama amb la càrrega de la setmana 2",
+  4: "2×10 per cama amb la mateixa càrrega", 5: "1×8 per cama amb la mateixa càrrega", 6: "2×8 per cama amb una placa més",
+  7: "2×10 per cama amb la càrrega de la setmana 6", 8: "2×8 per cama amb una placa més", 9: "2×10 per cama amb la càrrega de la setmana 8",
+  10: "2×8 per cama amb una placa més", 11: "2×10 per cama amb la càrrega de la setmana 10", 12: "2×8 per cama amb una placa més",
+  13: "2×8 per cama amb la càrrega de la setmana 12", 15: "2×6 per cama amb la càrrega de la setmana 10, a màxima velocitat"
+};
+FLEX[16] = FLEX[17] = FLEX[15];
+const flexio = n => ["Flexió de maluc a politja", "De peu, corretja al turmell, politja baixa. " + FLEX[n] + ". Puja el genoll explosiu i torna en 2 s"];
+const EXT = {
+  2: "2×8, pes corporal", 3: "2×10, pes corporal", 4: "2×8 amb 5 kg", 5: "1×8 amb 5 kg", 6: "2×10 amb 5 kg", 7: "2×8 amb 10 kg",
+  8: "2×10 amb 10 kg", 9: "2×8 amb 15 kg", 10: "2×10 amb 15 kg", 11: "2×8 amb 20 kg", 15: "1×8 amb 20 kg"
+};
+EXT[12] = EXT[13] = EXT[11]; EXT[16] = EXT[17] = EXT[15];
+const extensio = n => ["Extensió de maluc al banc de 45°", EXT[n] + ". Esquena recta, baixa en 3 s" + (EXT[n].includes("kg") ? "; el disc, contra el pit" : "")];
+const CMJ = ["Test de salt CMJ", "Després de l'escalfament, 3 salts amb les mans als malucs. Mesura'ls amb una app de salt i apunta el millor a «Fet real»"];
+const TEST_BESSO = ["Test de bessó", "Elevacions a una cama fins a la fallada, pes corporal, amb les dues cames. Apunta les repeticions de cada una a «Fet real»", true];
+const SETM_TEST = [2, 4, 6, 8, 10, 12, 16];
+const CRONO = ". Cronometra'ls i apunta el millor temps a «Fet real»";
+
 /* ---------- Octubre (setmanes 1-4) ---------- */
 const OCT = [
   { resum: ["Elevacions a una cama a l'esglaó: 3×12, pes corporal", "Baixa fins a notar estirament sense dolor, pausa d'1 s a baix, sense rebot", "Soli assegut: 3×12 a 25 kg", "Cap impacte"],
@@ -211,7 +237,7 @@ const OCT = [
   { resum: ["Elevacions a una cama: 3×6 amb 20 kg", "Soli assegut: 3×8 a 45 kg", "Dimecres: pogos baixos a una cama", "Dissabte: skipping A, trot continu i progressius al 60-70 %"],
     besso: [["Elevacions a una cama a l'esglaó", "3×6 amb 20 kg"], ["Soli assegut a màquina", "3×8 a 45 kg"]],
     dx: [["Pogos baixos a una cama", "3×8 per cama"]],
-    ds: [["Skipping A suau", "4×15 m", true], ["Trot continu", "10-15 min", true], ["Progressius de 40 m", "4-6 repeticions al 60-70 %, només si tot va sense dolor", true]] }
+    ds: [["Skipping A suau", "4×15 m", true], ["Dribbles de turmell", "2×20 m, molt suaus", true], ["Trot continu", "10-15 min", true], ["Progressius de 40 m", "4-6 repeticions al 60-70 %, només si tot va sense dolor", true]] }
 ];
 const PO = {
   squat: ["2×5 a 80 kg", "2×6 a 80 kg", "2×5 a 82,5 kg", "2×6 a 82,5 kg"],
@@ -228,12 +254,12 @@ const PO = {
   espatlla: ["2×8 amb 12,5 kg", "2×10 amb 12,5 kg", "2×8 amb 15 kg", "2×10 amb 15 kg"]
 };
 function diesOct(w) {
-  const s = OCT[w], b = s.besso.map(B), dx = s.dx.map(B);
+  const s = OCT[w], b = s.besso.map(B), dx = s.dx.map(B), n = w + 1;
   return [
     { nom: "Dilluns", tema: "Cama força i bessó", ex: [
       ["Box squat balístic", "2×5 a 50 kg"], ["Box squat pesat", PO.squat[w]],
       ["Hip thrust balístic", "2×5 amb 15 kg per costat"], ["Hip thrust pesat", PO.hip[w]],
-      ["Nòrdics", "3×5, pes corporal"], ["Premsa a una cama", PO.premsa[w] + ". Peu alt, empeny amb el taló"],
+      ["Nòrdics", (n === 1 ? "3×5" : "2×5") + ", pes corporal"], ...(n === 1 ? [] : [extensio(n)]), ["Premsa a una cama", PO.premsa[w] + ". Peu alt, empeny amb el taló"],
       ["Adductors a màquina", PO.add[w]], ...b, BAAR_FI ] },
     { nom: "Dimarts", tema: "Tors A", ex: [
       ["Dominades explosives", "2×5, pes corporal"], ["Dominades amb llast", PO.domin[w]],
@@ -241,11 +267,11 @@ function diesOct(w) {
       ["Rem assegut a dues mans, explosiu", "2×5 a 35 kg"], ["Rem assegut a dues mans, pesat", PO.rem2[w]],
       ["Core", "3 sèries"], BAAR_T("de la banca i el rem") ] },
     { nom: "Dimecres", tema: "Bessó, core i rem", ex: [
-      ...b, ...dx, ["Core antirotació", "3 sèries per costat"], ["Rem en zona 2", "35-40 min, ritme còmode, empenyent amb tot el peu"], BAAR ] },
+      ...b, ...dx, ...(SETM_TEST.includes(n) ? [TEST_BESSO] : []), ["Core antirotació", "3 sèries per costat"], ["Rem en zona 2", "35-40 min, ritme còmode, empenyent amb tot el peu"], BAAR ] },
     { nom: "Dijous", tema: "Cama potència", nota: "Avui sense bessó pesat.", ex: [
       ["Box squat explosiu", "4×3 a 50 kg"], ["Hip thrust explosiu", "3×5 amb 15 kg per costat"],
       ["Búlgara", PO.bulgara[w]], ["Curl d'isquiotibials estirat", PO.curl[w]],
-      ["Flexors de maluc amb goma", "3×8 per cama"], BAAR_FI ] },
+      n === 1 ? ["Flexors de maluc amb goma", "3×8 per cama"] : flexio(n), BAAR_FI ] },
     { nom: "Divendres", tema: "Tors B i bessó", nota: "Bíceps i tríceps: opcionals, 1-2 sèries al final.", ex: [
       ["Fons explosius", "2×5, pes corporal"], ["Fons amb llast", PO.fons[w]],
       ["Rem assegut a una mà", PO.rem1[w]], ["Press d'espatlla amb manuelles", PO.espatlla[w] + ", controlat"],
@@ -274,37 +300,37 @@ const PN = {
 const kg = x => String(x).replace(".", ",");
 const ESCALF = ["Escalfament", "Trot 8 min, mobilitat dinàmica 5 min, pont de gluti 2×10 i elevacions de taló 2×10"];
 const CALMA = ["Tornada a la calma", "5 min de trot suau"];
-const tecnica = n => ["Tècnica", "2×20 m de cada: marxa A, skipping A, talons al gluti i turmells" + (n >= 7 ? ", més skipping B" : "")];
+const tecnica = n => ["Tècnica", "2×20 m de cada: marxa A, skipping A, dribbles de turmell" + (n >= 6 ? ", dribbles de bessó" : "") + (n >= 8 ? ", dribbles de genoll" : "") + (n >= 7 ? ", skipping B" : "")];
 const PROG = ["Progressius", "2×40 m, pujant fins al 85 %"];
 const PISTA = {
   5: [["Pogos a dues cames", "3×10"], ["Progressius", "6×40 m al 70-80 %, 2 min de descans"]],
   6: [["Pogos a dues cames", "3×12"], ["Progressius", "4×30 m al 85 %, 2 min"], ["Acceleracions des de parat", "4×20 m al 85 %, 3 min"]],
   7: [["Pogos a una cama", "2×8 per cama"], PROG, ["Acceleracions des de parat", "6×20 m al 90 %, 3 min"]],
-  8: [["Pogos a una cama", "2×10 per cama"], ["Skips en alçada", "2×20 m"], PROG, ["Acceleracions llargues", "3×30 m al 90-95 %, 4 min"], ["Curses de 40 m", "2×40 m al 90 %, 5 min"]],
-  9: [["Pogos a una cama", "2×10 per cama"], ["Salts horitzontals a dues cames", "3×3, suaus"], PROG, ["Acceleracions llargues", "3×30 m al 95 %, 4 min"], ["Curses de 40 m", "2×40 m al 95 %, 5 min"]],
-  10: [["Pogos a una cama", "2×10 per cama"], ["Salts horitzontals a dues cames", "3×4"], PROG, ["Llançats de 20 m", "3 repeticions amb 20 m d'impuls, al 90-95 %, 5 min"], ["Curses de 40 m", "2×40 m al 95 %, 5 min"]],
-  11: [["Gambades", "3×20 m"], PROG, ["Llançats de 20 m", "4 repeticions amb 20 m d'impuls, al 95-100 %, 5 min"], ["Cursa de 50 m", "1×50 m al 95 %"]],
-  12: [["Gambades", "3×20 m"], PROG, ["Llançats de 20 m", "4 repeticions amb 25 m d'impuls, al 100 %, 5-6 min"], ["Curses de 50 m", "2×50 m al 95 %, 6 min"]],
+  8: [["Pogos a una cama", "2×10 per cama"], ["Skips en alçada", "2×20 m"], ["Skips de distància", "2×20 m, llargs i baixos"], PROG, ["Acceleracions llargues", "3×30 m al 90-95 %, 4 min"], ["Curses de 40 m", "2×40 m al 90 %, 5 min"]],
+  9: [["Pogos a una cama", "2×10 per cama"], ["Salts horitzontals a dues cames", "3×3, suaus"], ["Gambades de cama recta", "2×20 m, suaus"], PROG, ["Acceleracions llargues", "3×30 m al 95 %, 4 min"], ["Curses de 40 m", "2×40 m al 95 %, 5 min"]],
+  10: [["Pogos a una cama", "2×10 per cama"], ["Salts horitzontals a dues cames", "3×4"], ["Gambades de cama recta", "3×20 m"], PROG, ["Llançats de 20 m", "3 repeticions amb 20 m d'impuls, al 90-95 %, 5 min" + CRONO], ["Curses de 40 m", "2×40 m al 95 %, 5 min"]],
+  11: [["Gambades", "2×20 m, amplitud mitjana"], PROG, ["Llançats de 20 m", "4 repeticions amb 20 m d'impuls, al 95-100 %, 5 min" + CRONO], ["Cursa de 50 m", "1×50 m al 95 %"]],
+  12: [["Gambades", "3×20 m"], PROG, ["Llançats de 20 m", "4 repeticions amb 25 m d'impuls, al 100 %, 5-6 min" + CRONO], ["Curses de 50 m", "2×50 m al 95 %, 6 min"]],
   14: [["Pogos a dues cames", "3×10"], ["Progressius", "6×40 m al 80-90 %. Cap esforç màxim"]],
-  15: [["Gambades", "3×20 m"], ["Salts horitzontals a dues cames", "3×4"], PROG, ["Llançats de 20 m", "4 repeticions amb 20 m d'impuls, al 95 %, 5 min"]],
-  16: [["Gambades", "3×20 m"], ["Salts horitzontals a dues cames", "3×4"], PROG, ["Llançats de 20 m", "4 repeticions amb 25 m d'impuls, al 100 %, 5-6 min"], ["Cursa de 60 m", "1×60 m al 90 %"]],
-  17: [["Gambades", "3×20 m"], ["Salts horitzontals a dues cames", "3×4"], PROG, ["Llançats de 30 m", "3 repeticions amb 25 m d'impuls, al 100 %, 6 min"], ["Curses de 60 m", "2×60 m al 95 %, 8 min"]]
+  15: [["Gambades", "3×20 m"], ["Salts horitzontals a dues cames", "3×4"], PROG, ["Llançats de 20 m", "4 repeticions amb 20 m d'impuls, al 95 %, 5 min" + CRONO]],
+  16: [["Gambades", "3×20 m"], ["Salts horitzontals a dues cames", "3×4"], PROG, ["Llançats de 20 m", "4 repeticions amb 25 m d'impuls, al 100 %, 5-6 min" + CRONO], ["Cursa de 60 m", "1×60 m al 90 %"]],
+  17: [["Gambades", "3×20 m"], ["Salts horitzontals a dues cames", "3×4"], PROG, ["Llançats de 30 m", "3 repeticions amb 25 m d'impuls, al 100 %, 6 min" + CRONO], ["Curses de 60 m", "2×60 m al 95 %, 8 min"]]
 };
 const PDIV = {
   8: [["Acceleracions des de parat", "4×20 m al 90 %, 3 min"], ["Acceleracions llargues", "2×30 m al 90 %, 4 min"]],
   9: [["Sortides de tres suports", "4×10 m, 2 min"], ["Acceleracions", "4×20 m al 95 %, 3 min"]],
   10: [["Sortides de tacs", "4×10 m, 2 min"], ["Sortides de tacs", "3×20 m, 3 min"]],
   11: [["Sortides de tacs", "4×10 m, 2 min"], ["Sortides de tacs", "4×20 m, 3 min"], ["Sortides de tacs", "2×30 m, 4 min"]],
-  12: [["Sortides de tacs", "3×10 m, 2 min"], ["Sortides de tacs", "3×20 m, 3 min"], ["Sortides de tacs", "2×30 m, 4 min"], ["Trineu lleuger", "3×15 m amb 5 kg, només si el bessó està igualat amb l'altre"]]
+  12: [["Sortides de tacs", "3×10 m, 2 min"], ["Sortides de tacs", "3×20 m, 3 min"], ["Sortides de tacs", "2×30 m, 4 min"], ["Trineu lleuger", "3×15 m amb 5 kg, només si el test de bessó dona almenys el 90 % de l'altra cama"]]
 };
-const PISTA_TARDA = ["Pista: escalfament i tècnica", "Trot 8 min, mobilitat, i 2×20 m de marxa A, skipping A i B, talons al gluti i turmells"];
+const PISTA_TARDA = ["Pista: escalfament i tècnica", "Trot 8 min, mobilitat, i 2×20 m de marxa A, skipping A i B, i dribbles de turmell, de bessó i de genoll"];
 function diaPista(n, tema) {
-  return { nom: "Diumenge", tema: tema || "Pista", nota: "A última hora del matí. " + (n <= 6 ? "Sabatilles, sense claus." : "Claus només a les acceleracions."),
+  return { nom: "Diumenge", tema: tema || "Pista", nota: "A última hora del matí. " + (n <= 6 ? "Sabatilles, sense claus." : "Claus només a les acceleracions.") + " Recolza sota el cos: ataca el terra cap avall i enrere, sense allargar la gambada.",
     ex: [ESCALF, tecnica(n), ...(PISTA[n] || []), CALMA, BAAR] };
 }
 function cardioDijous(t) {
   if (t === "r44") return ["Rem 4×4", "4 min forts i 3 min suaus, 4 vegades"];
-  if (t === "c44") return ["4×4 noruec a la cinta", "4 min forts i 3 min suaus, 4 vegades. Abans del bloc de bessó"];
+  if (t === "c44") return ["Rem 4×4", "4 min forts i 3 min suaus, 4 vegades. Abans del bloc de bessó"];
   return ["Rem en zona 2", "30 min, suau"];
 }
 function blocBesso(k, lleuger) {
@@ -316,14 +342,14 @@ function blocBesso(k, lleuger) {
 }
 function diesNov(n) {
   const k = n - 5, bal = n <= 8 ? "52,5" : "55", hb = n <= 8 ? "17,5" : "20", desc = n === 5, duo = n >= 8;
-  const cardioDt = duo && (n === 9 || n === 11) ? ["4×4 noruec a la cinta", "4 min forts i 3 min suaus, 4 vegades. Abans del bloc de bessó"] : ["Rem en zona 2", "40 min, ritme còmode"];
+  const cardioDt = duo && (n === 9 || n === 11) ? ["Rem 4×4", "4 min forts i 3 min suaus, 4 vegades. Abans del bloc de bessó"] : ["Rem en zona 2", "40 min, ritme còmode"];
   const cama = [
     ["Box squat balístic", "2×5 a " + bal + " kg"], ["Box squat pesat", PN.squat[k]],
     ["Hip thrust balístic", "2×5 amb " + hb + " kg per costat"], ["Hip thrust pesat", PN.hip[k] + " kg per costat"],
-    ["Nòrdics", (n <= 8 ? "3×5" : "3×6") + ", pes corporal"], ["Premsa a una cama", "2×8 per cama amb " + kg(PN.premsa[k]) + " kg per costat"],
+    ["Nòrdics", (n <= 8 ? "2×5" : "2×6") + ", pes corporal"], extensio(n), ["Premsa a una cama", "2×8 per cama amb " + kg(PN.premsa[k]) + " kg per costat"],
     ["Curl d'isquiotibials estirat", PN.curl[k]],
     ["Adductors a màquina", "2×12" + (k % 4 >= 2 ? " amb una placa més que fa dues setmanes" : " amb la càrrega de la setmana passada")]];
-  if (duo) cama.push(["Flexors de maluc amb goma", "3×8 per cama"]);
+  if (duo) cama.push(flexio(n));
   const llanc = [
     ["Llançament de baló enrere per sobre del cap", "4 llançaments amb 5 kg, 45-60 s entre cadascun" + (n <= 6 ? ". Sense enlairar-te de terra" : "")],
     ["Llançament de baló endavant des de baix", "4 llançaments amb 5 kg"],
@@ -335,7 +361,7 @@ function diesNov(n) {
         ...llanc, ...torsCurt, PISTA_TARDA, ...(PDIV[n] || []), CALMA, BAAR ] }
     : { nom: "Divendres", tema: "Cama potència i tors curt", nota: "Poc volum i res pesat de cama: diumenge hi ha pista.", ex: [
         ...llanc, ["Box squat explosiu", "4×3 a " + bal + " kg"], ["Hip thrust explosiu", "3×5 amb " + hb + " kg per costat"],
-        ["Flexors de maluc amb goma", "3×8 per cama"], ...torsCurt, BAAR_FI ] };
+        flexio(n), ...torsCurt, BAAR_FI ] };
   const dijous = duo
     ? { nom: "Dijous", tema: "Baix", nota: "Demà hi ha pista: res de bessó pesat.", ex: [ ["Rem en zona 2", "30 min, suau"], ["Core i mobilitat", "15 min"], BAAR ] }
     : { nom: "Dijous", tema: "Cardio, bessó i core", ex: [ cardioDijous(PN.dijous[k]), ...blocBesso(k, true), ["Core i mobilitat", "15 min"], BAAR ] };
@@ -346,8 +372,8 @@ function diesNov(n) {
       ["Rem assegut a dues mans, explosiu", "2×5 a 35 kg"], ["Rem assegut a dues mans, pesat", PN.rem2[k]],
       ["Core", "3 sèries"], BAAR_T("de la banca i el rem") ] },
     { nom: "Dimarts", tema: "Bessó, core i cardio", ex: [
-      cardioDt, ...blocBesso(k, false), ["Core antirotació", "3 sèries per costat"], BAAR ] },
-    { nom: "Dimecres", tema: "Cama força", ex: [ ...cama, BAAR_FI ] },
+      cardioDt, ...blocBesso(k, false), ...(SETM_TEST.includes(n) ? [TEST_BESSO] : []), ["Core antirotació", "3 sèries per costat"], BAAR ] },
+    { nom: "Dimecres", tema: "Cama força", ex: [ CMJ, ...cama, BAAR_FI ] },
     dijous, divendres,
     { nom: "Dissabte", tema: "Descans", nota: duo ? "Entre dos dies de pista: descans real. Com a molt, mobilitat i una passejada." : "Descans per arribar fresc a la pista. Com a molt, mobilitat i una passejada.", ex: [ ["Mobilitat", "15 min"], BAAR ] },
     diaPista(n, duo ? "Pista, velocitat" : "Pista")
@@ -402,12 +428,12 @@ function diesGen(n) {
       k === 1 ? ["Rem en zona 2", "40 min, ritme còmode"] : ["4×4 noruec a la cinta", "4 min forts i 3 min suaus, 4 vegades. Abans del bloc de bessó"],
       B(["Elevacions a una cama a l'esglaó", "3×6 amb 35 kg"]),
       B(["Elevacions amb el peu girat", "2×10 per posició amb 10 kg: punta cap endins i cap enfora"]),
-      ["Core antirotació", "3 sèries per costat"], BAAR ] },
+      ...(SETM_TEST.includes(n) ? [TEST_BESSO] : []), ["Core antirotació", "3 sèries per costat"], BAAR ] },
     { nom: "Dimecres", tema: "Cama, conversió a potència", nota: "Una sola sèrie pesada i més feina balística.", ex: [
-      ["Box squat balístic", "3×4 a " + PG.bal[k] + " kg"], ["Box squat pesat", PG.squat[k]],
+      CMJ, ["Box squat balístic", "3×4 a " + PG.bal[k] + " kg"], ["Box squat pesat", PG.squat[k]],
       ["Hip thrust balístic", "3×5 amb 22,5 kg per costat"], ["Hip thrust pesat", PG.hip[k] + " kg per costat"],
-      ["Premsa a una cama, explosiva", "2×6 per cama amb 40 kg per costat"],
-      ["Nòrdics", "2×6, pes corporal"], ["Curl d'isquiotibials estirat", "2×6 a 50 kg"],
+      ["Premsa a una cama, explosiva", "2×6 per cama amb 40 kg per costat"], flexio(n),
+      ["Nòrdics", "2×6, pes corporal"], extensio(n), ["Curl d'isquiotibials estirat", "2×6 a 50 kg"],
       B(["Soli assegut a màquina", "3×8 a 70 kg"]), BAAR_FI ] },
     { nom: "Dijous", tema: "Baix", nota: "Demà hi ha pista: res de bessó pesat.", ex: [
       ["Rem en zona 2", "30 min, suau"], ["Core i mobilitat", "15 min"], BAAR ] },
@@ -415,7 +441,7 @@ function diesGen(n) {
       ["Llançaments de baló", "3 de cada tipus amb 5 kg: enrere, endavant i de pit"],
       ["Fons explosius", "2×5, pes corporal"], ["Fons amb llast", "1×5 amb 22,5 kg"],
       ["Rem assegut a una mà", "1×8 per braç a 40 kg"], ["Press d'espatlla amb manuelles", "1×8 amb 20 kg"],
-      ["Pista: escalfament i tècnica", "Trot 8 min, mobilitat, i 2×20 m de marxa A, skipping A i B, talons al gluti i turmells"],
+      PISTA_TARDA,
       ...PG.tacs[k], CALMA, BAAR ] },
     { nom: "Dissabte", tema: "Descans", nota: "Entre dos dies de pista: descans real. El trail només substitueix la pista de divendres si se suspèn.", ex: [ ["Mobilitat", "15 min"], BAAR ] },
     diaPista(n, "Pista, velocitat llançada")
