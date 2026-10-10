@@ -7,14 +7,14 @@
 <style>
   :root {
     --pista: #1d4e89; --pista-fosc: #153a66; --linia: #ffffff; --fons: #eef2f6;
-    --carta: #ffffff; --tinta: #14213d; --suau: #5d6b80; --groc: #f2c230; --fet: #2e7d5b; --vora: #d3dbe5;
+    --carta: #ffffff; --tinta: #14213d; --suau: #5d6b80; --groc: #f2c230; --fet: #2e7d5b; --vora: #d3dbe5; --vermell: #b3261e; --graf: #1d4e89;
     box-sizing: border-box;
     padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
   }
   @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) { --fons: #0f1724; --carta: #182335; --tinta: #e8edf5; --suau: #9aa8bd; --vora: #2b3a52; --pista: #24609f; --pista-fosc: #12233c; --fet: #58b98d; }
+    :root:not([data-theme="light"]) { --fons: #0f1724; --carta: #182335; --tinta: #e8edf5; --suau: #9aa8bd; --vora: #2b3a52; --pista: #24609f; --pista-fosc: #12233c; --fet: #58b98d; --vermell: #f08a80; --graf: #8db8ea; }
   }
-  :root[data-theme="dark"] { --fons: #0f1724; --carta: #182335; --tinta: #e8edf5; --suau: #9aa8bd; --vora: #2b3a52; --pista: #24609f; --pista-fosc: #12233c; --fet: #58b98d; }
+  :root[data-theme="dark"] { --fons: #0f1724; --carta: #182335; --tinta: #e8edf5; --suau: #9aa8bd; --vora: #2b3a52; --pista: #24609f; --pista-fosc: #12233c; --fet: #58b98d; --vermell: #f08a80; --graf: #8db8ea; }
   html { scroll-padding-top: env(safe-area-inset-top, 0px); background: var(--fons); }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--fons); color: var(--tinta); font: 16px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
@@ -63,8 +63,8 @@
   .regles h3 { margin: 12px 0 4px; font-size: 15px; color: var(--groc); }
   .regles ul { margin: 0; padding-left: 18px; font-size: 15px; }
   .regles li { margin: 5px 0; }
-  .sessio, .pes { background: var(--carta); border: 1px solid var(--vora); padding: 12px 14px; margin-bottom: 14px; font-size: 15px; }
-  .sessio h2, .pes h2 { margin: 0 0 8px; font-size: 19px; }
+  .sessio, .pes, .rec { background: var(--carta); border: 1px solid var(--vora); padding: 12px 14px; margin-bottom: 14px; font-size: 15px; }
+  .sessio h2, .pes h2, .rec h2 { margin: 0 0 8px; font-size: 19px; }
   .camps { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
   .camps input { flex: 1 1 140px; min-width: 0; padding: 9px 10px; font: inherit; border: 1px solid var(--vora); background: var(--fons); color: var(--tinta); }
   .boto { appearance: none; background: var(--pista); color: #fff; border: 0; padding: 10px 14px; font: inherit; cursor: pointer; }
@@ -75,6 +75,28 @@
   .fila label.ex { border-top: 0; }
   .peu { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; gap: 12px; }
   .estat { font-size: 13px; color: var(--suau); }
+  .rec h3 { margin: 12px 0 6px; font-size: 15px; font-weight: 600; }
+  .rec .dies-rec { display: flex; gap: 6px; margin-bottom: 4px; }
+  .rec .dies-rec button { flex: 1; }
+  .escala { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+  .escala button { appearance: none; border: 1px solid var(--vora); background: var(--fons); color: var(--tinta); font: inherit; padding: 8px 2px 7px; cursor: pointer; min-width: 0; }
+  .escala button b { display: block; font-size: 20px; line-height: 1.1; }
+  .escala button span { display: block; font-size: 11px; color: var(--suau); line-height: 1.2; }
+  .escala button[aria-pressed="true"] { background: var(--pista); border-color: var(--pista); color: #fff; }
+  .escala button[aria-pressed="true"] span { color: #fff; }
+  .consell { margin: 8px 0 0; font-size: 14px; }
+  .xifres { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 12px; text-align: center; }
+  .xifres div { border: 1px solid var(--vora); padding: 6px 2px; }
+  .xifres b { display: block; font-size: 22px; font-variant-numeric: tabular-nums; }
+  .xifres span { font-size: 12px; color: var(--suau); }
+  .diag { margin-top: 10px; padding: 8px 10px; border-left: 5px solid var(--suau); background: var(--fons); font-size: 14px; }
+  .diag.ok { border-color: var(--fet); } .diag.alerta { border-color: var(--groc); } .diag.mal { border-color: var(--vermell); }
+  .diag b { display: block; }
+  .graf { display: block; width: 100%; height: auto; margin-top: 10px; }
+  .llegenda { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12px; color: var(--suau); margin-top: 4px; }
+  .llegenda i { display: inline-block; width: 14px; height: 0; border-top: 3px solid var(--graf); vertical-align: middle; margin-right: 5px; }
+  .llegenda i.basal { border-top: 2px dashed var(--groc); }
+  .llegenda i.punt { width: 8px; height: 8px; border: 0; border-radius: 50%; background: var(--suau); }
   .reinicia { appearance: none; background: transparent; border: 1px solid var(--suau); color: var(--tinta); font: inherit; font-size: 14px; padding: 8px 12px; cursor: pointer; }
 </style>
 </head>
@@ -89,6 +111,7 @@
 <main>
   <section class="sessio" id="compte"></section>
   <section class="pes" id="pes" hidden></section>
+  <section class="rec" id="rec" hidden></section>
   <section class="resum" id="resum"></section>
   <div id="dies"></div>
 
@@ -120,6 +143,14 @@
       <li>Ous: només als esmorzars de cap de setmana, màxim 6 per setmana.</li>
       <li>La pizza casolana, el vespre abans d'un dia alt: diumenge a l'octubre, dissabte des del novembre. Mitja pizza amb amanida.</li>
       <li>Control: pes mitjà de 7 dies en dejú, plecs mensuals i cintura. Si baixa menys de 150 g per setmana, treu fruits secs; si baixa més de 400 g, afegeix hidrats els dies alts.</li>
+    </ul>
+    <h3>Recuperació</h3>
+    <ul>
+      <li>Readiness cada dia a la mateixa hora, entre mitja hora i una hora abans d'entrenar: com de preparat et sents per rendir avui. Els dies de descans també.</li>
+      <li>Sensacions just després d'entrenar: com t'has sentit a la sessió. No és l'esforç: un passeig pot ser esforç 1 i sensacions dolentes.</li>
+      <li>Basal: mitjana dels últims 90 dies, el teu estat normal. Aguda: mitjana dels últims 7 dies. Tendència: aguda d'avui menys la de fa una setmana.</li>
+      <li>Aguda per sota de la basal i baixant: descàrrega amb una sola sèrie pesada fins que torni a pujar. Per sota però pujant: mantén la càrrega, no l'augmentis.</li>
+      <li>Sensacions clarament per sota del readiness diversos dies seguits: senyal primerenc de fatiga.</li>
     </ul>
     <h3>FMD i salut</h3>
     <ul>
@@ -447,7 +478,7 @@ function resum(n) {
 /* ---------- Estat, compte i pintat ---------- */
 const CLAU = "entreno-v1";
 const SB = window.supabase.createClient("https://mwpyxlderrpxqvloclre.supabase.co", "sb_publishable_WrjF9wv1DyRju4cQp6BJqw_KA6pr9n6");
-let fets = {}, reals = {}, pesos = [], setmana = 1, usuari = null, avis = "";
+let fets = {}, reals = {}, pesos = [], recs = [], recDia = 0, setmana = 1, usuari = null, avis = "";
 const $ = id => document.getElementById(id);
 const esc = t => String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const iso = d => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
@@ -465,12 +496,13 @@ function pintaEstat() {
   $("estat").textContent = usuari ? "Les marques es guarden al teu compte." : "Sense sessió: les marques només es guarden en aquest dispositiu.";
 }
 async function carregaRemot() {
-  const [p, c, w] = await Promise.all([
+  const [p, c, w, rc] = await Promise.all([
     SB.from("progres").select("clau"),
     SB.from("carregues").select("clau,valor"),
-    SB.from("pes_corporal").select("dia,kg").order("dia", { ascending: false }).limit(21)
+    SB.from("pes_corporal").select("dia,kg").order("dia", { ascending: false }).limit(21),
+    SB.from("recuperacio").select("dia,readiness,sensacions").gte("dia", diaMenys(140))
   ]);
-  if (p.error || c.error || w.error) { avis = "No s'han pogut carregar les dades. Torna-ho a provar."; pintaCompte(); return; }
+  if (p.error || c.error || w.error || rc.error) { avis = "No s'han pogut carregar les dades. Torna-ho a provar."; pintaCompte(); return; }
   if (p.data.length === 0 && Object.keys(fets).length) {
     await SB.from("progres").upsert(Object.keys(fets).map(clau => ({ clau })));
   } else {
@@ -478,7 +510,8 @@ async function carregaRemot() {
   }
   reals = {}; c.data.forEach(r => { reals[r.clau] = r.valor; });
   pesos = w.data;
-  pinta();
+  recs = rc.data;
+  pinta(); pintaRec();
 }
 async function marca(id, fet) {
   desaLocal();
@@ -516,6 +549,91 @@ function pintaPes() {
     pintaPes();
   };
 }
+/* ---------- Recuperació: readiness i sensacions ---------- */
+const NIV_R = ["No preparat", "Suau", "Normal", "Dur", "Al límit"];
+const NIV_S = ["Molt malament", "Malament", "Normal", "Bé", "Molt bé"];
+const CONSELL = [
+  "Avui no entrenis. Com a molt, els isomètrics del bessó, mobilitat i una passejada.",
+  "Sessió lleugera: només les sèries explosives i la tècnica, sense les pesades, i la meitat de volum. Si toca pista, fes només l'escalfament i la tècnica.",
+  "Fes la sessió tal com està escrita.",
+  "Bon dia per a les sèries pesades o la pista: fes la sessió sencera.",
+  "Sessió sencera amb confiança, però sense passar dels pesos ni de les intensitats del pla."
+];
+function diaMenys(n) { const x = new Date(); x.setDate(x.getDate() - n); return iso(x); }
+function recDe(o) { const k = diaMenys(o); return recs.find(r => r.dia === k) || { dia: k, readiness: null, sensacions: null }; }
+function mitjRec(oDes, oFins, camp) {
+  const v = [];
+  for (let o = oFins; o <= oDes; o++) { const r = recDe(o); if (r[camp] != null) v.push(r[camp]); }
+  return v.length ? { m: v.reduce((a, b) => a + b, 0) / v.length, n: v.length } : null;
+}
+const basalDe = o => mitjRec(o + 89, o, "readiness"), agudaDe = o => mitjRec(o + 6, o, "readiness");
+async function desaRec(camp, valor) {
+  const r = recDe(recDia), nou = { dia: r.dia, readiness: r.readiness, sensacions: r.sensacions };
+  nou[camp] = valor;
+  const res = nou.readiness == null && nou.sensacions == null
+    ? await SB.from("recuperacio").delete().eq("dia", r.dia)
+    : await SB.from("recuperacio").upsert(nou);
+  if (res.error) { avis = "No s'ha pogut guardar la recuperació."; pintaCompte(); return; }
+  recs = recs.filter(x => x.dia !== r.dia);
+  if (nou.readiness != null || nou.sensacions != null) recs.push(nou);
+  pintaRec();
+}
+function diagnostic() {
+  const b = basalDe(0), a = agudaDe(0), a7 = agudaDe(7);
+  const xif = { b, a, delta: a && a7 ? a.m - a7.m : null };
+  if (!a) return { xif, cls: "", titol: "Sense dades aquesta setmana", txt: "Apunta el readiness cada dia per veure com evoluciones." };
+  if (!b || b.n < 14) return { xif, cls: "", titol: "Construint la línia basal", txt: "Portes " + (b ? b.n : 0) + " dies registrats. A partir de 14 dies es comença a veure el teu estat normal; amb 90, és fiable." };
+  const dif = a.m - b.m, dl = xif.delta == null ? 0 : xif.delta;
+  if (dif >= -0.25 && dl >= -0.1) return { xif, cls: "ok", titol: "Recuperat", txt: dif > 0.25 ? "Estàs més preparat que de costum i no baixes: assimiles bé la càrrega. Segueix el pla." : "A la teva línia i estable: la càrrega és la que pots assimilar. Segueix el pla." };
+  if (dif >= -0.25) return { xif, cls: "alerta", titol: "Recuperat, però acumulant fatiga", txt: "Encara estàs a la teva línia o per sobre, però baixant respecte a la setmana passada. No afegeixis res fora del pla i vigila els propers dies." };
+  if (dl >= 0.1) return { xif, cls: "alerta", titol: "Fatigat, però recuperant-te", txt: "Per sota de la teva línia, però pujant. Mantén la càrrega actual sense augmentar-la fins que tornis a la basal." };
+  return { xif, cls: "mal", titol: "Acumulant fatiga", txt: "Per sota de la teva línia i " + (dl <= -0.1 ? "baixant" : "sense millorar") + ". Fes descàrrega: una sola sèrie pesada per exercici, com la setmana 5, i repeteix pesos fins que l'aguda torni a pujar. Revisa també son, menjar i estrès." };
+}
+function desquadre() {
+  let s = 0, n = 0;
+  for (let o = 0; o < 7; o++) { const r = recDe(o); if (r.readiness != null && r.sensacions != null) { s += r.readiness - r.sensacions; n++; } }
+  return n >= 3 && s / n >= 0.75;
+}
+function grafRec() {
+  const N = 42, W = 600, H = 170, px = 26, py = 10, ph = H - py - 22;
+  const x = i => px + (W - px - 8) * i / (N - 1), y = v => py + ph * (5 - v) / 4;
+  let g = "";
+  for (let v = 1; v <= 5; v++) g += '<line x1="' + px + '" x2="' + (W - 8) + '" y1="' + y(v) + '" y2="' + y(v) + '" stroke="var(--vora)" stroke-width="1"/><text x="' + (px - 8) + '" y="' + (y(v) + 4) + '" font-size="12" text-anchor="end" fill="var(--suau)">' + v + "</text>";
+  const linia = (f, attrs) => {
+    let d = "", dins = false;
+    for (let i = 0; i < N; i++) { const r = f(N - 1 - i); if (r) { d += (dins ? "L" : "M") + x(i).toFixed(1) + " " + y(r.m).toFixed(1); dins = true; } else dins = false; }
+    return d ? '<path d="' + d + '" fill="none" ' + attrs + "/>" : "";
+  };
+  g += linia(basalDe, 'stroke="var(--groc)" stroke-width="2" stroke-dasharray="6 4"');
+  g += linia(agudaDe, 'stroke="var(--graf)" stroke-width="3" stroke-linejoin="round"');
+  for (let i = 0; i < N; i++) { const r = recDe(N - 1 - i); if (r.readiness != null) g += '<circle cx="' + x(i).toFixed(1) + '" cy="' + y(r.readiness) + '" r="3.5" fill="var(--suau)" opacity="0.7"/>'; }
+  [N - 1, Math.floor((N - 1) / 2), 0].forEach(i => { const p = diaMenys(N - 1 - i).split("-"); g += '<text x="' + x(i) + '" y="' + (H - 4) + '" font-size="12" text-anchor="' + (i === 0 ? "start" : i === N - 1 ? "end" : "middle") + '" fill="var(--suau)">' + Number(p[2]) + " " + MESOS[Number(p[1]) - 1] + "</text>"; });
+  return '<svg class="graf" viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="Readiness de les últimes 6 setmanes, amb la mitjana aguda i la basal">' + g + "</svg>" +
+    '<div class="llegenda"><span><i class="punt"></i>Readiness diari</span><span><i></i>Aguda, 7 dies</span><span><i class="basal"></i>Basal, 90 dies</span></div>';
+}
+function pintaRec() {
+  const s = $("rec");
+  s.hidden = !usuari;
+  if (!usuari) return;
+  const r = recDe(recDia), dg = diagnostic(), f = v => v.toFixed(1).replace(".", ",");
+  const escala = (camp, noms) => '<div class="escala" role="group">' + noms.map((t, i) =>
+    '<button data-camp="' + camp + '" data-v="' + (i + 1) + '" aria-pressed="' + (r[camp] === i + 1) + '"><b>' + (i + 1) + "</b><span>" + t + "</span></button>").join("") + "</div>";
+  const dl = dg.xif.delta;
+  s.innerHTML = '<h2 class="titol-font">Recuperació</h2>' +
+    '<div class="dies-rec"><button class="boto' + (recDia ? " sec" : "") + '" data-dia="0">Avui</button><button class="boto' + (recDia ? "" : " sec") + '" data-dia="1">Ahir</button></div>' +
+    "<h3>Abans d'entrenar: com de preparat et sents per rendir?</h3>" + escala("readiness", NIV_R) +
+    (r.readiness ? '<p class="consell"><b>' + r.readiness + ":</b> " + CONSELL[r.readiness - 1] + "</p>" : "") +
+    "<h3>Després d'entrenar: com t'has sentit?</h3>" + escala("sensacions", NIV_S) +
+    '<div class="xifres"><div><b>' + (dg.xif.b ? f(dg.xif.b.m) : "–") + "</b><span>Basal</span></div><div><b>" + (dg.xif.a ? f(dg.xif.a.m) : "–") + "</b><span>Aguda</span></div><div><b>" + (dl == null ? "–" : (dl > 0 ? "+" : "") + f(dl)) + "</b><span>Tendència</span></div></div>" +
+    '<div class="diag ' + dg.cls + '"><b>' + dg.titol + "</b>" + dg.txt + "</div>" +
+    (desquadre() ? '<div class="diag alerta"><b>Sensacions per sota del readiness</b>Aquesta setmana entrenant et sents pitjor del que esperaves abans de començar. És un senyal primerenc de fatiga.</div>' : "") +
+    grafRec();
+  s.querySelectorAll("[data-dia]").forEach(b => { b.onclick = () => { recDia = Number(b.dataset.dia); pintaRec(); }; });
+  s.querySelectorAll(".escala button").forEach(b => { b.onclick = () => {
+    const v = Number(b.dataset.v), camp = b.dataset.camp;
+    desaRec(camp, recDe(recDia)[camp] === v ? null : v);
+  }; });
+}
 function pintaCompte() {
   const s = $("compte");
   if (usuari) {
@@ -536,7 +654,7 @@ function pintaCompte() {
       pintaCompte();
     };
   }
-  pintaPes(); pintaEstat();
+  pintaPes(); pintaRec(); pintaEstat();
 }
 function pintaNav() {
   const c = $("carrers"); c.innerHTML = "";
@@ -616,7 +734,7 @@ SB.auth.onAuthStateChange((_e, sessio) => {
   const canvi = (nou && nou.id) !== (usuari && usuari.id);
   usuari = nou; avis = "";
   pintaCompte();
-  if (canvi) setTimeout(() => { if (usuari) carregaRemot(); else { reals = {}; pesos = []; pinta(); } }, 0);
+  if (canvi) setTimeout(() => { if (usuari) carregaRemot(); else { reals = {}; pesos = []; recs = []; pinta(); } }, 0);
 });
 </script>
 </body>
